@@ -19,7 +19,6 @@ const TrackRequest = ({ initialNumber }) => {
 
   useEffect(() => {
     if (initialNumber) handleTrack();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTrack = async (e) => {
