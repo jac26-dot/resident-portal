@@ -113,7 +113,7 @@ function App() {
                 <div className="info-item">
                   <div>
                     <div className="info-label">Address</div>
-                    <div className="info-value">Barangay 697 Zone 76, Malate, Manila</div>
+                    <div className="info-value">1858 L. M. Guerrero St., Manila, Philippines, 1004</div>
                   </div>
                 </div>
                 <div className="info-item">
