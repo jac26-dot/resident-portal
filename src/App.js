@@ -32,7 +32,7 @@ function App() {
               <img
                 src={logo}
                 alt="Barangay 697 Zone 76 Logo"
-                style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover' }}
+                style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(255,255,255,0.5)' }}
               />
             </div>
             <div>
