@@ -108,7 +108,7 @@ function App() {
 
             {/* Contact / Info */}
             <div className="section section-muted">
-              <h2 className="section-title">Need Help?</h2>
+              <h2 className="section-title" style={{ width: '100%', textAlign: 'center' }}>Need Help?</h2>
               <div className="info-grid">
                 <div className="info-item">
                   <div>
