@@ -58,7 +58,7 @@ function App() {
         <div className="header-inner">
           <div className="header-left">
             <div className="header-title">Barangay 697 Zone 76</div>
-            <div className="header-sub">Malate, Manila — Resident Portal</div>
+            <div className="header-sub">Malate, Manila — Zone 76 e-Serbisyo</div>
           </div>
           <nav className="header-nav">
             <button className={`nav-btn ${page === 'home' ? 'active' : ''}`} onClick={() => setPage('home')}>Home</button>
