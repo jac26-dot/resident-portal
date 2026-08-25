@@ -44,7 +44,7 @@ const HOTLINES = [
 const Hotlines = () => {
   return (
     <div className="section">
-      <div className="form-header" style={{ padding: 0, marginBottom: 32 }}>
+      <div className="form-header" style={{ padding: 0, marginBottom: 32, textAlign: 'center' }}>
         <h2>Emergency Hotlines</h2>
         <p>Save these numbers for police, fire, medical, and disaster response assistance.</p>
       </div>

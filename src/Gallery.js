@@ -14,7 +14,7 @@ const PHOTOS = [
 const Gallery = () => {
   return (
     <div className="section">
-      <div className="form-header" style={{ padding: 0, marginBottom: 32 }}>
+      <div className="form-header" style={{ padding: 0, marginBottom: 32, textAlign: 'center' }}>
         <h2>Community Gallery</h2>
         <p>Photos from barangay clean-up drives and community activities.</p>
       </div>
