@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import RequestForm from './RequestForm';
 import TrackRequest from './TrackRequest';
+import Hotlines from './Hotlines';
+import Gallery from './Gallery';
 import logo from './barangay-logo.jpg';
 import './App.css';
 
@@ -64,6 +66,8 @@ function App() {
             <button className={`nav-btn ${page === 'home' ? 'active' : ''}`} onClick={() => setPage('home')}>Home</button>
             <button className={`nav-btn ${page === 'request' ? 'active' : ''}`} onClick={goRequest}>Request Document</button>
             <button className={`nav-btn ${page === 'track' ? 'active' : ''}`} onClick={() => goTrack()}>Track Request</button>
+            <button className={`nav-btn ${page === 'hotlines' ? 'active' : ''}`} onClick={() => setPage('hotlines')}>Hotlines</button>
+            <button className={`nav-btn ${page === 'gallery' ? 'active' : ''}`} onClick={() => setPage('gallery')}>Gallery</button>
           </nav>
         </div>
       </header>
@@ -135,6 +139,8 @@ function App() {
 
         {page === 'request' && <RequestForm onTrack={goTrack} />}
         {page === 'track' && <TrackRequest initialNumber={trackNumber} />}
+        {page === 'hotlines' && <Hotlines />}
+        {page === 'gallery' && <Gallery />}
       </main>
 
       {/* Footer */}
