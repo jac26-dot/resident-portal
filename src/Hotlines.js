@@ -36,7 +36,7 @@ const HOTLINES = [
     category: 'Disaster Response',
     items: [
       { name: 'NDRRMC', numbers: ['(02) 8911-1406', '(02) 8912-2665', '(02) 8911-5061'] },
-      { name: 'MDRRMO MDEOC', numbers: ['09507003710', '09326622322', '(02) 8463-3295'] },
+      { name: 'MDRRMO MDEOC', numbers: ['0950 700 3710', '0932 662 2323', '(02) 8463-3295'] },
     ],
   },
 ];
