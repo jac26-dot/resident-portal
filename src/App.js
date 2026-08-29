@@ -3,6 +3,7 @@ import RequestForm from './RequestForm';
 import TrackRequest from './TrackRequest';
 import Hotlines from './Hotlines';
 import Gallery from './Gallery';
+import VerifyResidency from './VerifyResidency';
 import logo from './barangay-logo.jpg';
 import './App.css';
 
@@ -48,6 +49,7 @@ function App() {
   const [trackNumber, setTrackNumber] = useState('');
 
   const goRequest = () => setPage('request');
+  const goVerify = () => setPage('verify');
   const goTrack = (controlNumber) => {
     if (controlNumber) setTrackNumber(controlNumber);
     setPage('track');
@@ -137,7 +139,8 @@ function App() {
           </div>
         )}
 
-        {page === 'request' && <RequestForm onTrack={goTrack} />}
+        {page === 'request' && <RequestForm onTrack={goTrack} onVerify={goVerify} />}
+        {page === 'verify' && <VerifyResidency onGoRequest={goRequest} />}
         {page === 'track' && <TrackRequest initialNumber={trackNumber} />}
         {page === 'hotlines' && <Hotlines />}
         {page === 'gallery' && <Gallery />}
