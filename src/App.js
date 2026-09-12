@@ -4,6 +4,9 @@ import TrackRequest from './TrackRequest';
 import Hotlines from './Hotlines';
 import Gallery from './Gallery';
 import VerifyResidency from './VerifyResidency';
+import Register from './Register';
+import Login from './Login';
+import Dashboard from './Dashboard';
 import logo from './barangay-logo.jpg';
 import './App.css';
 
@@ -50,6 +53,14 @@ function App() {
 
   const goRequest = () => setPage('request');
   const goVerify = () => setPage('verify');
+  const [residentLoggedIn, setResidentLoggedIn] = useState(!!localStorage.getItem('residentToken'));
+  const goDashboard = () => setPage('dashboard');
+  const handleLogout = () => {
+    localStorage.removeItem('residentToken');
+    localStorage.removeItem('residentInfo');
+    setResidentLoggedIn(false);
+    setPage('home');
+  };
   const goTrack = (controlNumber) => {
     if (controlNumber) setTrackNumber(controlNumber);
     setPage('track');
@@ -65,6 +76,14 @@ function App() {
             <div className="header-sub">Malate, Manila — Zone 76 e-Serbisyo</div>
           </div>
           <nav className="header-nav">
+            {residentLoggedIn ? (
+              <button className={`nav-btn ${page === 'dashboard' ? 'active' : ''}`} onClick={goDashboard}>My Account</button>
+            ) : (
+              <>
+                <button className={`nav-btn ${page === 'login' ? 'active' : ''}`} onClick={() => setPage('login')}>Resident Login</button>
+                <button className={`nav-btn ${page === 'register' ? 'active' : ''}`} onClick={() => setPage('register')}>Register</button>
+              </>
+            )}
             <button className={`nav-btn ${page === 'home' ? 'active' : ''}`} onClick={() => setPage('home')}>Home</button>
             <button className={`nav-btn ${page === 'request' ? 'active' : ''}`} onClick={goRequest}>Request Document</button>
             <button className={`nav-btn ${page === 'track' ? 'active' : ''}`} onClick={() => goTrack()}>Track Request</button>
@@ -144,6 +163,9 @@ function App() {
         {page === 'track' && <TrackRequest initialNumber={trackNumber} />}
         {page === 'hotlines' && <Hotlines />}
         {page === 'gallery' && <Gallery />}
+        {page === 'register' && <Register onGoLogin={() => setPage('login')} />}
+        {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => setPage('register')} />}
+        {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} />}
       </main>
 
       {/* Footer */}
