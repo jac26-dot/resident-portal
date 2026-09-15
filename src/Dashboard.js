@@ -455,9 +455,11 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
                 </div>
               </div>
             </div>
+            <p className="id-digital-notice">
+              <strong>Digital Preview.</strong> Your physical Barangay ID will be printed and released by the Barangay.
+            </p>
             <div className="modal-actions" style={{ marginTop: 16 }}>
               <button className="btn-outline-dark btn-sm" onClick={() => setShowIdCard(false)}>Close</button>
-              <button className="btn-primary btn-sm" onClick={() => window.print()}>Print ID</button>
             </div>
           </div>
         </div>
