@@ -55,7 +55,6 @@ const RequestForm = ({ onTrack, onVerify }) => {
       setVerified(false);
     }
     setMode('guest');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
