@@ -122,10 +122,6 @@ function App() {
                   </div>
                 </div>
                 <p className="hero-desc">Request your barangay documents online without leaving your home. Fast, easy, and convenient.</p>
-                <div className="hero-btns">
-                  <button className="btn-primary" onClick={goRequest}>Request a Document</button>
-                  <button className="btn-outline" onClick={() => goTrack()}>Track My Request</button>
-                </div>
               </div>
             </div>
 
