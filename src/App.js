@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RequestForm from './RequestForm';
 import TrackRequest from './TrackRequest';
 import Hotlines from './Hotlines';
@@ -7,6 +7,8 @@ import VerifyResidency from './VerifyResidency';
 import Register from './Register';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import Terms from './Terms';
+import Privacy from './Privacy';
 import logo from './barangay-logo.jpg';
 import './App.css';
 
@@ -47,15 +49,42 @@ const DOCUMENTS = [
   { key: 'goodmoral',  name: 'Good Moral Certificate',    desc: 'For school, employment, and other requirements' },
 ];
 
+// Every page reachable by hash, so a direct link or refresh lands
+// on the right screen instead of always resetting to Home.
+const VALID_PAGES = ['home', 'request', 'verify', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy'];
+
+function pageFromHash() {
+  const raw = window.location.hash.replace(/^#\/?/, '');
+  return VALID_PAGES.includes(raw) ? raw : 'home';
+}
+
 function App() {
-  const [page, setPage] = useState('home');
+  const [page, setPageState] = useState(pageFromHash);
   const [trackNumber, setTrackNumber] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const goRequest = () => { setPage('request'); setMenuOpen(false); };
+  // Central place every navigation goes through, so the URL hash
+  // always matches what's on screen — this is what makes a page
+  // like #/terms survive a refresh or work as a direct link.
+  const setPage = (p) => {
+    setPageState(p);
+    setMenuOpen(false);
+    const target = `#/${p}`;
+    if (window.location.hash !== target) window.location.hash = target;
+  };
+
+  // Keep in sync if the hash changes from outside React (back/forward
+  // buttons, a bookmarked link, or someone typing a URL directly).
+  useEffect(() => {
+    const onHashChange = () => setPageState(pageFromHash());
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  const goRequest = () => setPage('request');
   const goVerify = () => setPage('verify');
   const [residentLoggedIn, setResidentLoggedIn] = useState(!!localStorage.getItem('residentToken'));
-  const goDashboard = () => { setPage('dashboard'); setMenuOpen(false); };
+  const goDashboard = () => setPage('dashboard');
   const handleLogout = () => {
     localStorage.removeItem('residentToken');
     localStorage.removeItem('residentInfo');
@@ -65,9 +94,8 @@ function App() {
   const goTrack = (controlNumber) => {
     if (controlNumber) setTrackNumber(controlNumber);
     setPage('track');
-    setMenuOpen(false);
   };
-  const navTo = (p) => { setPage(p); setMenuOpen(false); };
+  const navTo = (p) => setPage(p);
 
   return (
     <div className="app">
@@ -175,6 +203,8 @@ function App() {
         {page === 'register' && <Register onGoLogin={() => navTo('login')} />}
         {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} />}
         {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} onTrack={goTrack} />}
+        {page === 'terms' && <Terms onBack={() => navTo('home')} />}
+        {page === 'privacy' && <Privacy onBack={() => navTo('home')} />}
       </main>
 
       {/* Footer */}
@@ -189,6 +219,8 @@ function App() {
             {residentLoggedIn && <button onClick={goDashboard}>My Account</button>}
             <button onClick={() => navTo('hotlines')}>Hotlines</button>
             <button onClick={() => navTo('gallery')}>Gallery</button>
+            <button onClick={() => navTo('terms')}>Terms &amp; Conditions</button>
+            <button onClick={() => navTo('privacy')}>Privacy Notice</button>
           </div>
         </div>
         <div className="footer-copyright">© {new Date().getFullYear()} Barangay Management System</div>
