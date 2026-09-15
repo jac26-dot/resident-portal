@@ -25,9 +25,10 @@ const EMPTY = {
   firstName: '', middleName: '', lastName: '', birthDate: '', gender: 'Male', civilStatus: 'Single',
   address: '', contactNumber: '', email: '',
   password: '', confirmPassword: '', agreeTerms: false,
+  isVoter: false, isIndigent: false, isSeniorCitizen: false,
 };
 
-const Register = ({ onDone, onGoLogin }) => {
+const Register = ({ onDone, onGoLogin, onBack }) => {
   const [form, setForm] = useState(EMPTY);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -85,6 +86,7 @@ const Register = ({ onDone, onGoLogin }) => {
 
   return (
     <div className="section">
+      {onBack && <button className="back-btn" onClick={onBack} type="button">← Back</button>}
       <div className="form-header" style={{ textAlign: 'center' }}>
         <h2>Create a Resident Account</h2>
         <p>Register once to track all your document requests in one place. Admin approval is required before you can log in.</p>
@@ -169,6 +171,24 @@ const Register = ({ onDone, onGoLogin }) => {
                 <span style={{ fontSize: 12, color: '#c81e1e' }}>Passwords do not match.</span>
               )}
             </div>
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h3 className="form-section-title">Resident Classification <span style={{fontWeight:400,color:'#6b7280',fontSize:12}}>(optional)</span></h3>
+          <p className="form-note" style={{ margin: '0 0 14px' }}>
+            Select any that apply. These are self-declared at registration and may be confirmed by the barangay office; selecting a classification here does not by itself constitute official verification.
+          </p>
+          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13.5 }}>
+              <input type="checkbox" name="isVoter" checked={form.isVoter} onChange={handleChange} /> Registered Voter
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13.5 }}>
+              <input type="checkbox" name="isIndigent" checked={form.isIndigent} onChange={handleChange} /> Indigent
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13.5 }}>
+              <input type="checkbox" name="isSeniorCitizen" checked={form.isSeniorCitizen} onChange={handleChange} /> Senior Citizen
+            </label>
           </div>
         </div>
 

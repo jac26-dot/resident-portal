@@ -200,7 +200,7 @@ function App() {
         {page === 'track' && <TrackRequest initialNumber={trackNumber} />}
         {page === 'hotlines' && <Hotlines />}
         {page === 'gallery' && <Gallery />}
-        {page === 'register' && <Register onGoLogin={() => navTo('login')} />}
+        {page === 'register' && <Register onGoLogin={() => navTo('login')} onBack={() => navTo('home')} />}
         {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} />}
         {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} onTrack={goTrack} />}
         {page === 'terms' && <Terms onBack={() => navTo('home')} />}
