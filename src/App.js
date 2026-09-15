@@ -24,7 +24,7 @@ const DocIcon = ({ type }) => {
       );
     case 'indigency':
       return (
-        <svg {...common}><path d="M12 20s-7-4.4-9.3-8.4C1.3 8.6 3 5.5 6 5.2c1.8-.2 3.3.8 4 2.2.7-1.4 2.2-2.4 4-2.2 3 .3 4.7 3.4 3.3 6.4C19 15.6 12 20 12 20z" /></svg>
+        <svg {...common}><path d="M12 20s-7-4.4-9.3-8.4C1.3 8.6 3 5.5 6 5.2c1.8-.2 3.3.8 4 2.2.7-1.4 2.2-2.4 4-2.2 3 .3 4.7 3.4 3.3 6.4C19 15.6 12 2012 20z" /></svg>
       );
     case 'business':
       return (
@@ -50,11 +50,12 @@ const DOCUMENTS = [
 function App() {
   const [page, setPage] = useState('home');
   const [trackNumber, setTrackNumber] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const goRequest = () => setPage('request');
+  const goRequest = () => { setPage('request'); setMenuOpen(false); };
   const goVerify = () => setPage('verify');
   const [residentLoggedIn, setResidentLoggedIn] = useState(!!localStorage.getItem('residentToken'));
-  const goDashboard = () => setPage('dashboard');
+  const goDashboard = () => { setPage('dashboard'); setMenuOpen(false); };
   const handleLogout = () => {
     localStorage.removeItem('residentToken');
     localStorage.removeItem('residentInfo');
@@ -64,7 +65,9 @@ function App() {
   const goTrack = (controlNumber) => {
     if (controlNumber) setTrackNumber(controlNumber);
     setPage('track');
+    setMenuOpen(false);
   };
+  const navTo = (p) => { setPage(p); setMenuOpen(false); };
 
   return (
     <div className="app">
@@ -75,20 +78,30 @@ function App() {
             <div className="header-title">Barangay 697 Zone 76</div>
             <div className="header-sub">Malate, Manila — Zone 76 e-Serbisyo</div>
           </div>
-          <nav className="header-nav">
+
+          <button
+            className="nav-toggle"
+            onClick={() => setMenuOpen(o => !o)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
+            <button className={`nav-btn ${page === 'home' ? 'active' : ''}`} onClick={() => navTo('home')}>Home</button>
             {residentLoggedIn ? (
               <button className={`nav-btn ${page === 'dashboard' ? 'active' : ''}`} onClick={goDashboard}>My Account</button>
             ) : (
               <>
-                <button className={`nav-btn ${page === 'login' ? 'active' : ''}`} onClick={() => setPage('login')}>Resident Login</button>
-                <button className={`nav-btn ${page === 'register' ? 'active' : ''}`} onClick={() => setPage('register')}>Register</button>
+                <button className={`nav-btn ${page === 'login' ? 'active' : ''}`} onClick={() => navTo('login')}>Resident Login</button>
+                <button className={`nav-btn ${page === 'register' ? 'active' : ''}`} onClick={() => navTo('register')}>Register</button>
               </>
             )}
-            <button className={`nav-btn ${page === 'home' ? 'active' : ''}`} onClick={() => setPage('home')}>Home</button>
-            <button className={`nav-btn ${page === 'request' ? 'active' : ''}`} onClick={goRequest}>Request Document</button>
-            <button className={`nav-btn ${page === 'track' ? 'active' : ''}`} onClick={() => goTrack()}>Track Request</button>
-            <button className={`nav-btn ${page === 'hotlines' ? 'active' : ''}`} onClick={() => setPage('hotlines')}>Hotlines</button>
-            <button className={`nav-btn ${page === 'gallery' ? 'active' : ''}`} onClick={() => setPage('gallery')}>Gallery</button>
+            <button className={`nav-btn ${page === 'hotlines' ? 'active' : ''}`} onClick={() => navTo('hotlines')}>Hotlines</button>
+            <button className={`nav-btn ${page === 'gallery' ? 'active' : ''}`} onClick={() => navTo('gallery')}>Gallery</button>
           </nav>
         </div>
       </header>
@@ -163,17 +176,26 @@ function App() {
         {page === 'track' && <TrackRequest initialNumber={trackNumber} />}
         {page === 'hotlines' && <Hotlines />}
         {page === 'gallery' && <Gallery />}
-        {page === 'register' && <Register onGoLogin={() => setPage('login')} />}
-        {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => setPage('register')} />}
-        {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} />}
+        {page === 'register' && <Register onGoLogin={() => navTo('login')} />}
+        {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} />}
+        {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} onTrack={goTrack} />}
       </main>
 
       {/* Footer */}
       <footer className="footer">
-        <div>Barangay 697 Zone 76 — Malate, Manila, District V, City of Manila</div>
-        <div style={{ marginTop: 4, fontSize: 11, opacity: 0.7 }}>
-          © {new Date().getFullYear()} Barangay Management System
+        <div className="footer-inner">
+          <div className="footer-main">
+            <div className="footer-title">Barangay 697 Zone 76</div>
+            <div>Malate, Manila, District V, City of Manila</div>
+          </div>
+          <div className="footer-links">
+            <button onClick={() => navTo('home')}>Home</button>
+            {residentLoggedIn && <button onClick={goDashboard}>My Account</button>}
+            <button onClick={() => navTo('hotlines')}>Hotlines</button>
+            <button onClick={() => navTo('gallery')}>Gallery</button>
+          </div>
         </div>
+        <div className="footer-copyright">© {new Date().getFullYear()} Barangay Management System</div>
       </footer>
     </div>
   );
