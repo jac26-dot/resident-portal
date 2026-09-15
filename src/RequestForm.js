@@ -13,13 +13,40 @@ const DOCUMENT_TYPES = [
 ];
 
 const RequestForm = ({ onTrack, onVerify }) => {
-  const [verified, setVerified] = useState(null); // null while checking
+  const [mode, setMode] = useState(null); // 'resident' | 'guest' | null (checking)
+  const [verified, setVerified] = useState(null); // guest-flow verification result
   const [form, setForm] = useState({ documentType: 'Barangay Clearance', purpose: '' });
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState('');
   const [success,  setSuccess]  = useState(null);
 
+  const residentToken = localStorage.getItem('residentToken');
+
   useEffect(() => {
+    // Logged-in, admin-approved residents skip verification entirely —
+    // their account approval (Resident Account Registrations) already
+    // establishes who they are.
+    if (residentToken) {
+      axios.get(`${API}/resident-accounts/me`, { headers: { Authorization: `Bearer ${residentToken}` } })
+        .then(res => {
+          setVerified({
+            residentId: res.data.data.resident.id,
+            firstName: res.data.data.resident.firstName,
+            middleName: res.data.data.resident.middleName,
+            lastName: res.data.data.resident.lastName,
+            address: res.data.data.resident.address,
+          });
+          setMode('resident');
+        })
+        .catch(() => {
+          // Token invalid/expired — fall back to the guest flow rather
+          // than dead-ending the page.
+          setMode('guest');
+        });
+      return;
+    }
+
+    // Guest (not logged in) — same verification flow as before.
     const token = sessionStorage.getItem('verificationToken');
     const resident = sessionStorage.getItem('verifiedResident');
     if (token && resident) {
@@ -27,6 +54,8 @@ const RequestForm = ({ onTrack, onVerify }) => {
     } else {
       setVerified(false);
     }
+    setMode('guest');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -38,22 +67,28 @@ const RequestForm = ({ onTrack, onVerify }) => {
       setError('Please enter the purpose of your request.');
       return;
     }
-    const token = sessionStorage.getItem('verificationToken');
-    if (!token) {
-      setVerified(false);
-      return;
-    }
+
     setLoading(true);
     try {
-      const docRes = await axios.post(`${API}/documents/public`, {
-        residentId: verified.residentId,
-        documentType: form.documentType,
-        purpose: form.purpose,
-        verificationToken: token,
-      });
+      let docRes;
+      if (mode === 'resident') {
+        docRes = await axios.post(`${API}/resident-accounts/me/documents`, {
+          documentType: form.documentType,
+          purpose: form.purpose,
+        }, { headers: { Authorization: `Bearer ${residentToken}` } });
+      } else {
+        const token = sessionStorage.getItem('verificationToken');
+        if (!token) { setVerified(false); setLoading(false); return; }
+        docRes = await axios.post(`${API}/documents/public`, {
+          residentId: verified.residentId,
+          documentType: form.documentType,
+          purpose: form.purpose,
+          verificationToken: token,
+        });
+      }
       setSuccess(docRes.data.data);
     } catch (err) {
-      if (err.response?.status === 401 || err.response?.status === 403) {
+      if (mode === 'guest' && (err.response?.status === 401 || err.response?.status === 403)) {
         // Token expired or mismatched — require re-verification.
         sessionStorage.removeItem('verificationToken');
         sessionStorage.removeItem('verifiedResident');
@@ -65,17 +100,16 @@ const RequestForm = ({ onTrack, onVerify }) => {
     }
   };
 
-  // Still checking sessionStorage
-  if (verified === null) return null;
+  // Still figuring out login/session state
+  if (mode === null) return null;
 
-  // Not verified yet — send them to verification instead of the form.
-  if (verified === false) {
+  // Guest, not verified yet — send them to verification instead of the form.
+  if (mode === 'guest' && verified === false) {
     return (
       <div className="section">
         <div className="success-box">
-          <div className="success-icon">🔒</div>
           <h2>Verification Required</h2>
-          <p>Please verify your residency before requesting a document.</p>
+          <p>Please verify your residency before requesting a document, or log in to your resident account to skip this step.</p>
           <div className="success-btns">
             <button className="btn-primary" onClick={onVerify}>Verify Residency</button>
           </div>
@@ -88,7 +122,6 @@ const RequestForm = ({ onTrack, onVerify }) => {
     return (
       <div className="section">
         <div className="success-box">
-          <div className="success-icon">✅</div>
           <h2>Request Submitted Successfully!</h2>
           <p>Your document request has been submitted. Please save your control number.</p>
           <div className="control-number-box">
@@ -121,7 +154,7 @@ const RequestForm = ({ onTrack, onVerify }) => {
 
       <form onSubmit={handleSubmit} className="request-form">
         <div className="form-section">
-          <h3 className="form-section-title">Verified Resident</h3>
+          <h3 className="form-section-title">{mode === 'resident' ? 'Resident' : 'Verified Resident'}</h3>
           <div className="form-row-3">
             <div className="form-group">
               <label className="form-label">First Name</label>
@@ -141,7 +174,7 @@ const RequestForm = ({ onTrack, onVerify }) => {
             <input className="form-control" value={verified.address} disabled />
           </div>
           <div className="form-note">
-            These details are locked to your verified record. If anything is incorrect, please visit the barangay hall to update your resident record.
+            These details are locked to your {mode === 'resident' ? 'resident account' : 'verified record'}. If anything is incorrect, please visit the barangay hall to update your resident record.
           </div>
         </div>
 
