@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
-const Login = ({ onLoggedIn, onGoRegister }) => {
+const Login = ({ onLoggedIn, onGoRegister, onBack }) => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -33,6 +33,8 @@ const Login = ({ onLoggedIn, onGoRegister }) => {
 
   return (
     <div className="section">
+      {onBack && <button className="back-btn" onClick={onBack} type="button">← Back</button>}
+
       <div className="form-header" style={{ textAlign: 'center' }}>
         <h2>Resident Login</h2>
         <p>Log in to view your document requests and profile.</p>

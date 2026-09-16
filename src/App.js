@@ -195,13 +195,13 @@ function App() {
           </div>
         )}
 
-        {page === 'request' && <RequestForm onTrack={goTrack} onVerify={goVerify} />}
+        {page === 'request' && <RequestForm onTrack={goTrack} onVerify={goVerify} onBack={() => (residentLoggedIn ? goDashboard() : navTo('home'))} />}
         {page === 'verify' && <VerifyResidency onGoRequest={goRequest} />}
         {page === 'track' && <TrackRequest initialNumber={trackNumber} />}
         {page === 'hotlines' && <Hotlines />}
         {page === 'gallery' && <Gallery />}
         {page === 'register' && <Register onGoLogin={() => navTo('login')} onBack={() => navTo('home')} />}
-        {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} />}
+        {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} onBack={() => navTo('home')} />}
         {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} onTrack={goTrack} />}
         {page === 'terms' && <Terms onBack={() => navTo('home')} />}
         {page === 'privacy' && <Privacy onBack={() => navTo('home')} />}

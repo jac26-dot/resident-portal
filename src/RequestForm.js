@@ -12,7 +12,7 @@ const DOCUMENT_TYPES = [
   'Good Moral Certificate',
 ];
 
-const RequestForm = ({ onTrack, onVerify }) => {
+const RequestForm = ({ onTrack, onVerify, onBack }) => {
   const [mode, setMode] = useState(null); // 'resident' | 'guest' | null (checking)
   const [verified, setVerified] = useState(null); // guest-flow verification result
   const [form, setForm] = useState({ documentType: 'Barangay Clearance', purpose: '' });
@@ -144,6 +144,7 @@ const RequestForm = ({ onTrack, onVerify }) => {
 
   return (
     <div className="section">
+      {onBack && <button className="back-btn" onClick={onBack} type="button">← Back</button>}
       <div className="form-header" style={{ textAlign: 'center' }}>
         <h2>Request a Document</h2>
         <p>Fill out the form below to request a barangay document online.</p>

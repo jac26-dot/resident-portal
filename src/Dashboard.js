@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import ImageCropModal from './ImageCropModal';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
@@ -87,37 +88,49 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
       return { id: r.controlNumber + '-x', text: `Your ${r.documentType} request was not approved. Please visit the barangay hall for details.`, date: r.createdAt };
     });
 
-  // ---------------- Photo upload ----------------
+  // ---------------- Photo upload (with crop step) ----------------
+  const [cropSrc, setCropSrc] = useState(null); // raw selected image, shown in the crop modal
+
   const handlePhotoSelect = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setPhotoError('');
 
-    const okTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const okTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (!okTypes.includes(file.type)) {
-      setPhotoError('Please upload a JPG, PNG, or WEBP image.');
+      setPhotoError('Please upload a JPG or PNG image.');
+      e.target.value = '';
       return;
     }
-    if (file.size > 3 * 1024 * 1024) {
-      setPhotoError('Image is too large. Please choose a photo under 3MB.');
+    if (file.size > 8 * 1024 * 1024) {
+      setPhotoError('Image is too large. Please choose a photo under 8MB.');
+      e.target.value = '';
       return;
     }
 
     const reader = new FileReader();
-    reader.onload = async () => {
-      setPhotoBusy(true);
-      try {
-        await axios.patch(`${API}/resident-accounts/me/photo`, { photo: reader.result }, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        loadProfile();
-      } catch (err) {
-        setPhotoError(err.response?.data?.message || 'Could not upload your photo. Please try again.');
-      } finally {
-        setPhotoBusy(false);
-      }
+    reader.onload = () => {
+      setCropSrc(reader.result); // opens the crop modal — nothing uploaded yet
+      e.target.value = ''; // allow re-selecting the same file later
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleCropCancel = () => setCropSrc(null);
+
+  const handleCropConfirm = async (croppedDataUrl) => {
+    setCropSrc(null);
+    setPhotoBusy(true);
+    try {
+      await axios.patch(`${API}/resident-accounts/me/photo`, { photo: croppedDataUrl }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      loadProfile();
+    } catch (err) {
+      setPhotoError(err.response?.data?.message || 'Could not upload your photo. Please try again.');
+    } finally {
+      setPhotoBusy(false);
+    }
   };
 
   const handlePhotoRemove = async () => {
@@ -183,7 +196,7 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/jpeg,image/jpg,image/png,image/webp"
+              accept="image/jpeg,image/jpg,image/png"
               style={{ display: 'none' }}
               onChange={handlePhotoSelect}
             />
@@ -202,6 +215,9 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
               <span>{resident?.email || 'No email'}</span>
             </div>
             {photoError && <div className="alert-error" style={{ margin: '10px 0 0', maxWidth: 'none' }}>{photoError}</div>}
+            <p className="photo-guidance">
+              Upload a clear recent photo with a plain <strong>white background</strong>. Use an ID-style portrait with your face clearly visible. Accepted formats: JPG, JPEG, PNG.
+            </p>
             <div className="profile-actions">
               <button className="btn-primary btn-sm" onClick={() => setShowEditProfile(true)}>Edit Profile</button>
               <button className="btn-outline-dark btn-sm" onClick={() => fileInputRef.current?.click()}>Upload Photo</button>
@@ -466,6 +482,15 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
       )}
 
       {/* ---------- Logout confirm ---------- */}
+      {/* ---------- Photo crop ---------- */}
+      {cropSrc && (
+        <ImageCropModal
+          imageSrc={cropSrc}
+          onCancel={handleCropCancel}
+          onConfirm={handleCropConfirm}
+        />
+      )}
+
       {showLogoutConfirm && (
         <div className="modal-overlay" onClick={() => setShowLogoutConfirm(false)}>
           <div className="modal-card modal-card-sm" onClick={e => e.stopPropagation()}>
