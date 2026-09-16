@@ -28,7 +28,7 @@ const EMPTY = {
   isVoter: false, isIndigent: false, isSeniorCitizen: false,
 };
 
-const Register = ({ onDone, onGoLogin, onBack }) => {
+const Register = ({ onDone, onGoLogin, onBack, onNeedOtp }) => {
   const [form, setForm] = useState(EMPTY);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -61,7 +61,11 @@ const Register = ({ onDone, onGoLogin, onBack }) => {
     setLoading(true);
     try {
       const res = await axios.post(`${API}/resident-accounts/register`, form);
-      setSuccess(res.data.data.message);
+      if (res.data.data.requiresOtp) {
+        onNeedOtp(res.data.data.email);
+      } else {
+        setSuccess(res.data.data.message);
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {

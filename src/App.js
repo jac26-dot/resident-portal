@@ -9,6 +9,7 @@ import Login from './Login';
 import Dashboard from './Dashboard';
 import Terms from './Terms';
 import Privacy from './Privacy';
+import VerifyOtp from './VerifyOtp';
 import logo from './barangay-logo.jpg';
 import './App.css';
 
@@ -51,7 +52,7 @@ const DOCUMENTS = [
 
 // Every page reachable by hash, so a direct link or refresh lands
 // on the right screen instead of always resetting to Home.
-const VALID_PAGES = ['home', 'request', 'verify', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy'];
+const VALID_PAGES = ['home', 'request', 'verify', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy', 'verify-otp'];
 
 function pageFromHash() {
   const raw = window.location.hash.replace(/^#\/?/, '');
@@ -96,6 +97,10 @@ function App() {
     setPage('track');
   };
   const navTo = (p) => setPage(p);
+  const goVerifyOtp = (email) => {
+    sessionStorage.setItem('pendingOtpEmail', email);
+    setPage('verify-otp');
+  };
 
   return (
     <div className="app">
@@ -200,8 +205,9 @@ function App() {
         {page === 'track' && <TrackRequest initialNumber={trackNumber} />}
         {page === 'hotlines' && <Hotlines />}
         {page === 'gallery' && <Gallery />}
-        {page === 'register' && <Register onGoLogin={() => navTo('login')} onBack={() => navTo('home')} />}
-        {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} onBack={() => navTo('home')} />}
+        {page === 'register' && <Register onGoLogin={() => navTo('login')} onBack={() => navTo('home')} onNeedOtp={goVerifyOtp} />}
+        {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} onBack={() => navTo('home')} onNeedOtp={goVerifyOtp} />}
+        {page === 'verify-otp' && <VerifyOtp onVerified={() => navTo('login')} onBack={() => navTo('home')} />}
         {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} onTrack={goTrack} />}
         {page === 'terms' && <Terms onBack={() => navTo('home')} />}
         {page === 'privacy' && <Privacy onBack={() => navTo('home')} />}
