@@ -42,6 +42,7 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
   const [editForm, setEditForm] = useState({ contactNumber: '', address: '' });
   const [editBusy, setEditBusy] = useState(false);
   const [editError, setEditError] = useState('');
+  const [cropSrc, setCropSrc] = useState(null); // raw selected image, shown in the crop modal
   const fileInputRef = useRef(null);
 
   const token = localStorage.getItem('residentToken');
@@ -89,8 +90,6 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
     });
 
   // ---------------- Photo upload (with crop step) ----------------
-  const [cropSrc, setCropSrc] = useState(null); // raw selected image, shown in the crop modal
-
   const handlePhotoSelect = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
