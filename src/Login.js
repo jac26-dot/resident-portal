@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
-const Login = ({ onLoggedIn, onGoRegister, onBack, onNeedOtp }) => {
+const Login = ({ onLoggedIn, onGoRegister, onBack }) => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,10 +25,6 @@ const Login = ({ onLoggedIn, onGoRegister, onBack, onNeedOtp }) => {
       localStorage.setItem('residentInfo', JSON.stringify({ userId: data.userId, residentId: data.residentId, name: data.name }));
       onLoggedIn(data);
     } catch (err) {
-      if (err.response?.data?.requiresOtp && onNeedOtp) {
-        onNeedOtp(err.response.data.email);
-        return;
-      }
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
