@@ -4,14 +4,271 @@ import axios from 'axios';
 // Your real live backend — update this if it ever changes.
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
-const DOCUMENT_TYPES = [
-  'Barangay Clearance',
-  'Certificate of Residency',
-  'Certificate of Indigency',
-  'Business Clearance',
-  'Good Moral Certificate',
-];
+const DOC_INFO = {
+  'Barangay Clearance': {
+    desc: 'General-purpose clearance certifying you have no derogatory record with the barangay.',
+    requirements: ['Valid government-issued ID', 'Proof of residency (utility bill or lease, if requested)'],
+    processing: '1–2 working days',
+    fee: '₱50.00',
+  },
+  'Certificate of Residency': {
+    desc: 'Certifies that you are a resident of this barangay — commonly required for school, work, or government transactions.',
+    requirements: ['Valid government-issued ID'],
+    processing: '1–2 working days',
+    fee: '₱30.00',
+  },
+  'Certificate of Indigency': {
+    desc: 'For residents seeking free medical, legal, or educational assistance based on financial need.',
+    requirements: ['Valid government-issued ID', 'Proof of income status, if available'],
+    processing: '1–2 working days',
+    fee: 'Free',
+  },
+  'Business Clearance': {
+    desc: 'Required for registering or renewing a business permit within the barangay.',
+    requirements: ['Valid government-issued ID', 'DTI/SEC registration (for new businesses)', 'Previous business permit (for renewals)'],
+    processing: '2–3 working days',
+    fee: '₱200.00',
+  },
+  'Good Moral Certificate': {
+    desc: 'Certifies good moral standing — commonly required for school, employment, or other applications.',
+    requirements: ['Valid government-issued ID'],
+    processing: '1–2 working days',
+    fee: '₱50.00',
+  },
+};
 
+const DOCUMENT_TYPES = Object.keys(DOC_INFO);
+
+const STEP_LABELS = ['Select Document', 'Your Information', 'Requirements', 'Review', 'Submit'];
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ---------------------------------------------------------------
+// Multi-step wizard — logged-in, already-approved residents only.
+// ---------------------------------------------------------------
+const ResidentWizard = ({ verified, residentToken, onTrack, onBack }) => {
+  const [step, setStep] = useState(0);
+  const [documentType, setDocumentType] = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [file, setFile] = useState(null); // { name, dataUrl }
+  const [fileError, setFileError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(null);
+
+  const goNext = () => { setError(''); setStep(s => Math.min(s + 1, 4)); };
+  const goPrev = () => { setError(''); setStep(s => Math.max(s - 1, 0)); };
+
+  const handleFileSelect = async (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setFileError('');
+    const okTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+    if (!okTypes.includes(f.type)) {
+      setFileError('Please upload a JPG, PNG, or PDF file.');
+      e.target.value = '';
+      return;
+    }
+    if (f.size > 3 * 1024 * 1024) {
+      setFileError('File is too large. Please choose a file under 3MB.');
+      e.target.value = '';
+      return;
+    }
+    const dataUrl = await readFileAsDataUrl(f);
+    setFile({ name: f.name, dataUrl });
+    e.target.value = '';
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const body = { documentType, purpose };
+      if (file) body.requirementFile = { dataUrl: file.dataUrl, fileName: file.name };
+      const res = await axios.post(`${API}/resident-accounts/me/documents`, body, {
+        headers: { Authorization: `Bearer ${residentToken}` },
+      });
+      setSuccess(res.data.data);
+      setStep(4);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to submit request. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const info = documentType ? DOC_INFO[documentType] : null;
+
+  return (
+    <div className="section">
+      {onBack && step === 0 && <button className="back-btn" onClick={onBack} type="button">← Back</button>}
+      {step > 0 && step < 4 && <button className="back-btn" onClick={goPrev} type="button">← Back</button>}
+
+      <div className="form-header" style={{ textAlign: 'center' }}>
+        <h2>Request a Document</h2>
+        {step < 4 && <p>Step {step + 1} of 4 — {STEP_LABELS[step]}</p>}
+      </div>
+
+      {step < 4 && (
+        <div className="wizard-steps">
+          {STEP_LABELS.slice(0, 4).map((label, i) => (
+            <React.Fragment key={label}>
+              <div className={`wizard-step-dot ${i <= step ? 'active' : ''}`}>{i < step ? '✓' : i + 1}</div>
+              {i < 3 && <div className={`wizard-step-line ${i < step ? 'active' : ''}`} />}
+            </React.Fragment>
+          ))}
+        </div>
+      )}
+
+      {error && <div className="alert-error">{error}</div>}
+
+      <div className="request-form">
+        {step === 0 && (
+          <div className="form-section">
+            <h3 className="form-section-title">Select a Document</h3>
+            <div className="wizard-doc-grid">
+              {DOCUMENT_TYPES.map(t => (
+                <button
+                  type="button"
+                  key={t}
+                  className={`wizard-doc-option ${documentType === t ? 'selected' : ''}`}
+                  onClick={() => setDocumentType(t)}
+                >
+                  <div className="wizard-doc-option-name">{t}</div>
+                  <div className="wizard-doc-option-desc">{DOC_INFO[t].desc}</div>
+                  <div className="wizard-doc-option-meta">
+                    <span>⏱ {DOC_INFO[t].processing}</span>
+                    <span>{DOC_INFO[t].fee}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            {info && (
+              <div className="form-note" style={{ marginTop: 16 }}>
+                <strong>Requirements:</strong> {info.requirements.join(', ')}
+              </div>
+            )}
+            <button type="button" className="btn-primary btn-full" disabled={!documentType} onClick={goNext} style={{ marginTop: 16 }}>
+              Continue
+            </button>
+          </div>
+        )}
+
+        {step === 1 && (
+          <div className="form-section">
+            <h3 className="form-section-title">Your Information</h3>
+            <div className="form-row-3">
+              <div className="form-group">
+                <label className="form-label">First Name</label>
+                <input className="form-control" value={verified.firstName} disabled />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Middle Name</label>
+                <input className="form-control" value={verified.middleName || ''} disabled />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Last Name</label>
+                <input className="form-control" value={verified.lastName} disabled />
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Address</label>
+              <input className="form-control" value={verified.address} disabled />
+            </div>
+            <div className="form-note">
+              These details come from your resident account. If anything is incorrect, please visit the barangay hall to update your record.
+            </div>
+            <button type="button" className="btn-primary btn-full" onClick={goNext} style={{ marginTop: 8 }}>Continue</button>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="form-section">
+            <h3 className="form-section-title">Requirements</h3>
+            <div className="form-group">
+              <label className="form-label">Purpose *</label>
+              <input className="form-control" placeholder="e.g. Employment, School enrollment..." value={purpose} onChange={e => setPurpose(e.target.value)} />
+            </div>
+
+            <label className="form-label">Supporting Document <span style={{ fontWeight: 400, color: 'var(--ink-muted)' }}>(optional)</span></label>
+            {!file ? (
+              <div className="wizard-upload-box">
+                <input type="file" id="req-file" accept="image/jpeg,image/jpg,image/png,application/pdf" style={{ display: 'none' }} onChange={handleFileSelect} />
+                <label htmlFor="req-file" className="btn-outline-dark btn-sm" style={{ cursor: 'pointer' }}>Upload File</label>
+                <p style={{ fontSize: 12, color: 'var(--ink-muted)', marginTop: 8 }}>JPG, PNG, or PDF. Max 3MB.</p>
+              </div>
+            ) : (
+              <div className="wizard-file-preview">
+                {file.dataUrl.startsWith('data:image') ? (
+                  <img src={file.dataUrl} alt={file.name} />
+                ) : (
+                  <div className="wizard-file-icon">📄</div>
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</div>
+                  <button type="button" className="btn-link" onClick={() => setFile(null)}>Remove &amp; replace</button>
+                </div>
+              </div>
+            )}
+            {fileError && <div className="alert-error" style={{ maxWidth: 'none', marginTop: 10 }}>{fileError}</div>}
+
+            <button type="button" className="btn-primary btn-full" disabled={!purpose} onClick={goNext} style={{ marginTop: 16 }}>Continue</button>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="form-section">
+            <h3 className="form-section-title">Review Your Request</h3>
+            <div className="track-detail-row"><span className="track-detail-label">Document</span><span className="track-detail-value">{documentType}</span></div>
+            <div className="track-detail-row"><span className="track-detail-label">Purpose</span><span className="track-detail-value">{purpose}</span></div>
+            <div className="track-detail-row"><span className="track-detail-label">Requestor</span><span className="track-detail-value">{verified.lastName}, {verified.firstName}</span></div>
+            <div className="track-detail-row"><span className="track-detail-label">Address</span><span className="track-detail-value">{verified.address}</span></div>
+            <div className="track-detail-row"><span className="track-detail-label">Fee</span><span className="track-detail-value">{info?.fee}</span></div>
+            <div className="track-detail-row"><span className="track-detail-label">Supporting File</span><span className="track-detail-value">{file ? file.name : 'None attached'}</span></div>
+
+            <button type="button" className="btn-primary btn-full" disabled={loading} onClick={handleSubmit} style={{ marginTop: 16 }}>
+              {loading ? 'Submitting...' : 'Submit Request'}
+            </button>
+          </div>
+        )}
+
+        {step === 4 && success && (
+          <div className="success-box">
+            <h2>Request Submitted Successfully!</h2>
+            <p>Your document request has been submitted. Please save your Request ID.</p>
+            <div className="control-number-box">
+              <div className="control-label">Your Request ID</div>
+              <div className="control-number">{success.controlNumber}</div>
+              <div className="control-note">Use this ID to track your request</div>
+            </div>
+            <div className="success-details">
+              <div><strong>Document:</strong> {success.documentType}</div>
+              <div><strong>Date Submitted:</strong> {new Date().toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+              <div><strong>Status:</strong> {success.status || 'Pending'}</div>
+              <div><strong>Next Step:</strong> Wait for the barangay to process your request. Visit the barangay hall to claim your document once ready.</div>
+            </div>
+            <div className="success-btns">
+              <button className="btn-primary" onClick={() => onTrack(success.controlNumber)}>Track My Request</button>
+              <button className="btn-outline" onClick={() => { setStep(0); setSuccess(null); setDocumentType(''); setPurpose(''); setFile(null); }}>Submit Another Request</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------
+// Main export — routes between the resident wizard and the
+// simpler guest (not logged in) verification-based form.
+// ---------------------------------------------------------------
 const RequestForm = ({ onTrack, onVerify, onBack }) => {
   const [mode, setMode] = useState(null); // 'resident' | 'guest' | null (checking)
   const [verified, setVerified] = useState(null); // guest-flow verification result
@@ -23,9 +280,6 @@ const RequestForm = ({ onTrack, onVerify, onBack }) => {
   const residentToken = localStorage.getItem('residentToken');
 
   useEffect(() => {
-    // Logged-in, admin-approved residents skip verification entirely —
-    // their account approval (Resident Account Registrations) already
-    // establishes who they are.
     if (residentToken) {
       axios.get(`${API}/resident-accounts/me`, { headers: { Authorization: `Bearer ${residentToken}` } })
         .then(res => {
@@ -39,14 +293,11 @@ const RequestForm = ({ onTrack, onVerify, onBack }) => {
           setMode('resident');
         })
         .catch(() => {
-          // Token invalid/expired — fall back to the guest flow rather
-          // than dead-ending the page.
           setMode('guest');
         });
       return;
     }
 
-    // Guest (not logged in) — same verification flow as before.
     const token = sessionStorage.getItem('verificationToken');
     const resident = sessionStorage.getItem('verifiedResident');
     if (token && resident) {
@@ -69,26 +320,17 @@ const RequestForm = ({ onTrack, onVerify, onBack }) => {
 
     setLoading(true);
     try {
-      let docRes;
-      if (mode === 'resident') {
-        docRes = await axios.post(`${API}/resident-accounts/me/documents`, {
-          documentType: form.documentType,
-          purpose: form.purpose,
-        }, { headers: { Authorization: `Bearer ${residentToken}` } });
-      } else {
-        const token = sessionStorage.getItem('verificationToken');
-        if (!token) { setVerified(false); setLoading(false); return; }
-        docRes = await axios.post(`${API}/documents/public`, {
-          residentId: verified.residentId,
-          documentType: form.documentType,
-          purpose: form.purpose,
-          verificationToken: token,
-        });
-      }
+      const token = sessionStorage.getItem('verificationToken');
+      if (!token) { setVerified(false); setLoading(false); return; }
+      const docRes = await axios.post(`${API}/documents/public`, {
+        residentId: verified.residentId,
+        documentType: form.documentType,
+        purpose: form.purpose,
+        verificationToken: token,
+      });
       setSuccess(docRes.data.data);
     } catch (err) {
-      if (mode === 'guest' && (err.response?.status === 401 || err.response?.status === 403)) {
-        // Token expired or mismatched — require re-verification.
+      if (err.response?.status === 401 || err.response?.status === 403) {
         sessionStorage.removeItem('verificationToken');
         sessionStorage.removeItem('verifiedResident');
         setVerified(false);
@@ -99,13 +341,16 @@ const RequestForm = ({ onTrack, onVerify, onBack }) => {
     }
   };
 
-  // Still figuring out login/session state
   if (mode === null) return null;
 
-  // Guest, not verified yet — send them to verification instead of the form.
-  if (mode === 'guest' && verified === false) {
+  if (mode === 'resident') {
+    return <ResidentWizard verified={verified} residentToken={residentToken} onTrack={onTrack} onBack={onBack} />;
+  }
+
+  if (verified === false) {
     return (
       <div className="section">
+        {onBack && <button className="back-btn" onClick={onBack} type="button">← Back</button>}
         <div className="success-box">
           <h2>Verification Required</h2>
           <p>Please verify your residency before requesting a document, or log in to your resident account to skip this step.</p>
@@ -154,7 +399,7 @@ const RequestForm = ({ onTrack, onVerify, onBack }) => {
 
       <form onSubmit={handleSubmit} className="request-form">
         <div className="form-section">
-          <h3 className="form-section-title">{mode === 'resident' ? 'Resident' : 'Verified Resident'}</h3>
+          <h3 className="form-section-title">Verified Resident</h3>
           <div className="form-row-3">
             <div className="form-group">
               <label className="form-label">First Name</label>
@@ -174,7 +419,7 @@ const RequestForm = ({ onTrack, onVerify, onBack }) => {
             <input className="form-control" value={verified.address} disabled />
           </div>
           <div className="form-note">
-            These details are locked to your {mode === 'resident' ? 'resident account' : 'verified record'}. If anything is incorrect, please visit the barangay hall to update your resident record.
+            These details are locked to your verified record. If anything is incorrect, please visit the barangay hall to update your resident record.
           </div>
         </div>
 
