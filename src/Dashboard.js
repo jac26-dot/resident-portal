@@ -31,7 +31,7 @@ function formatDate(d) {
   return new Date(d).toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
+const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRequestHistory }) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -334,10 +334,15 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack }) => {
             <span className="quick-action-label">Request a Document</span>
             <span className="quick-action-desc">Submit a new document request online</span>
           </button>
-          <button className="quick-action" onClick={() => document.getElementById('my-requests-anchor')?.scrollIntoView({ behavior: 'smooth' })}>
+          <button className="quick-action" onClick={onTrackRequests}>
             <span className="quick-action-icon">☰</span>
-            <span className="quick-action-label">View My Requests</span>
-            <span className="quick-action-desc">See the status of all your requests</span>
+            <span className="quick-action-label">Track My Requests</span>
+            <span className="quick-action-desc">See the live status of active requests</span>
+          </button>
+          <button className="quick-action" onClick={onRequestHistory}>
+            <span className="quick-action-icon">🕘</span>
+            <span className="quick-action-label">Request History</span>
+            <span className="quick-action-desc">Search and filter all past requests</span>
           </button>
           <button className="quick-action" onClick={() => setShowEditProfile(true)}>
             <span className="quick-action-icon">✎</span>
