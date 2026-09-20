@@ -11,6 +11,8 @@ import Terms from './Terms';
 import Privacy from './Privacy';
 import MyRequests from './MyRequests';
 import Notifications from './Notifications';
+import About from './About';
+import Services from './Services';
 import logo from './barangay-logo.jpg';
 import './App.css';
 
@@ -53,7 +55,7 @@ const DOCUMENTS = [
 
 // Every page reachable by hash, so a direct link or refresh lands
 // on the right screen instead of always resetting to Home.
-const VALID_PAGES = ['home', 'request', 'verify', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy', 'track-requests', 'request-history', 'notifications'];
+const VALID_PAGES = ['home', 'request', 'verify', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy', 'track-requests', 'request-history', 'notifications', 'about', 'services'];
 
 function pageFromHash() {
   const raw = window.location.hash.replace(/^#\/?/, '');
@@ -122,6 +124,8 @@ function App() {
 
           <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
             <button className={`nav-btn ${page === 'home' ? 'active' : ''}`} onClick={() => navTo('home')}>Home</button>
+            <button className={`nav-btn ${page === 'about' ? 'active' : ''}`} onClick={() => navTo('about')}>About Barangay</button>
+            <button className={`nav-btn ${page === 'services' ? 'active' : ''}`} onClick={() => navTo('services')}>Services</button>
             {residentLoggedIn ? (
               <button className={`nav-btn ${page === 'dashboard' ? 'active' : ''}`} onClick={goDashboard}>My Account</button>
             ) : (
@@ -208,6 +212,8 @@ function App() {
         {page === 'track-requests' && <MyRequests initialFilter="Active" title="Track My Requests" onBack={goDashboard} onRequestDocument={goRequest} />}
         {page === 'request-history' && <MyRequests initialFilter="All" title="Request History" onBack={goDashboard} onRequestDocument={goRequest} />}
         {page === 'notifications' && <Notifications onBack={goDashboard} />}
+        {page === 'about' && <About onBack={() => navTo('home')} />}
+        {page === 'services' && <Services onBack={() => navTo('home')} onGoLogin={() => navTo('login')} />}
         {page === 'terms' && <Terms onBack={() => navTo('home')} />}
         {page === 'privacy' && <Privacy onBack={() => navTo('home')} />}
       </main>
@@ -221,6 +227,8 @@ function App() {
           </div>
           <div className="footer-links">
             <button onClick={() => navTo('home')}>Home</button>
+            <button onClick={() => navTo('about')}>About</button>
+            <button onClick={() => navTo('services')}>Services</button>
             {residentLoggedIn && <button onClick={goDashboard}>My Account</button>}
             <button onClick={() => navTo('hotlines')}>Hotlines</button>
             <button onClick={() => navTo('gallery')}>Gallery</button>
