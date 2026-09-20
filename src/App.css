@@ -1233,3 +1233,33 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   padding-top: 14px;
   border-top: 1px solid var(--line);
 }
+
+/* ============================================================
+   Notifications
+   ============================================================ */
+.notif-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: var(--crimson);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 10px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.notif-new-badge {
+  flex-shrink: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--crimson);
+  background: var(--crimson-tint);
+  padding: 2px 8px;
+  border-radius: 10px;
+  align-self: flex-start;
+}
+.activity-dot.unread { background: var(--crimson); }

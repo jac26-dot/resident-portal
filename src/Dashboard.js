@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import ImageCropModal from './ImageCropModal';
+import { buildNotifications } from './Notifications';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
@@ -31,7 +32,7 @@ function formatDate(d) {
   return new Date(d).toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRequestHistory }) => {
+const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRequestHistory, onOpenNotifications }) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -79,15 +80,8 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
 
-  const notifications = requests
-    .filter(r => ['Approved', 'Released', 'Rejected'].includes(r.status))
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 4)
-    .map(r => {
-      if (r.status === 'Approved') return { id: r.controlNumber + '-a', text: `Your ${r.documentType} request has been approved.`, date: r.createdAt };
-      if (r.status === 'Released') return { id: r.controlNumber + '-r', text: `Your ${r.documentType} is ready — thank you for using our online portal.`, date: r.createdAt };
-      return { id: r.controlNumber + '-x', text: `Your ${r.documentType} request was not approved. Please visit the barangay hall for details.`, date: r.createdAt };
-    });
+  const notifications = buildNotifications(data).slice(0, 4);
+  const unreadCount = buildNotifications(data).filter(n => new Date(n.date).getTime() > (localStorage.getItem('notificationsLastRead') ? new Date(localStorage.getItem('notificationsLastRead')).getTime() : 0)).length;
 
   // ---------------- Photo upload (with crop step) ----------------
   const handlePhotoSelect = (e) => {
@@ -354,12 +348,22 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
             <span className="quick-action-label">View Barangay ID</span>
             <span className="quick-action-desc">See your resident identification card</span>
           </button>
+          <button className="quick-action" onClick={onOpenNotifications}>
+            <span className="quick-action-icon">🔔</span>
+            <span className="quick-action-label">Notifications {unreadCount > 0 && <span className="notif-count-badge">{unreadCount}</span>}</span>
+            <span className="quick-action-desc">Updates on your account and requests</span>
+          </button>
         </div>
 
         {/* ---------- Notifications / Recent activity ---------- */}
         <div className="two-col-grid">
           <div>
-            <h3 className="account-section-title">Notifications</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 className="account-section-title" style={{ margin: '40px 0 16px' }}>
+                Notifications {unreadCount > 0 && <span className="notif-count-badge">{unreadCount}</span>}
+              </h3>
+              <button className="btn-link" onClick={onOpenNotifications}>View all →</button>
+            </div>
             {notifications.length === 0 ? (
               <p className="muted-text">You have no notifications yet.</p>
             ) : (

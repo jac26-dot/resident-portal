@@ -10,6 +10,7 @@ import Dashboard from './Dashboard';
 import Terms from './Terms';
 import Privacy from './Privacy';
 import MyRequests from './MyRequests';
+import Notifications from './Notifications';
 import logo from './barangay-logo.jpg';
 import './App.css';
 
@@ -52,7 +53,7 @@ const DOCUMENTS = [
 
 // Every page reachable by hash, so a direct link or refresh lands
 // on the right screen instead of always resetting to Home.
-const VALID_PAGES = ['home', 'request', 'verify', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy', 'track-requests', 'request-history'];
+const VALID_PAGES = ['home', 'request', 'verify', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy', 'track-requests', 'request-history', 'notifications'];
 
 function pageFromHash() {
   const raw = window.location.hash.replace(/^#\/?/, '');
@@ -203,9 +204,10 @@ function App() {
         {page === 'gallery' && <Gallery />}
         {page === 'register' && <Register onGoLogin={() => navTo('login')} onBack={() => navTo('home')} />}
         {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} onBack={() => navTo('home')} />}
-        {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} onTrack={goTrack} onTrackRequests={() => navTo('track-requests')} onRequestHistory={() => navTo('request-history')} />}
+        {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} onTrack={goTrack} onTrackRequests={() => navTo('track-requests')} onRequestHistory={() => navTo('request-history')} onOpenNotifications={() => navTo('notifications')} />}
         {page === 'track-requests' && <MyRequests initialFilter="Active" title="Track My Requests" onBack={goDashboard} onRequestDocument={goRequest} />}
         {page === 'request-history' && <MyRequests initialFilter="All" title="Request History" onBack={goDashboard} onRequestDocument={goRequest} />}
+        {page === 'notifications' && <Notifications onBack={goDashboard} />}
         {page === 'terms' && <Terms onBack={() => navTo('home')} />}
         {page === 'privacy' && <Privacy onBack={() => navTo('home')} />}
       </main>
