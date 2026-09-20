@@ -152,50 +152,107 @@ function App() {
                   <div className="hero-text">
                     <div className="hero-badge">Republic of the Philippines • City of Manila</div>
                     <h1 className="hero-title">Barangay 697 Zone 76</h1>
-                    <p className="hero-sub">Online Document Request Portal — Malate, Manila</p>
+                    <p className="hero-sub">Online Resident Portal — Malate, Manila</p>
                   </div>
                 </div>
-                <p className="hero-desc">Request your barangay documents online without leaving your home. Fast, easy, and convenient.</p>
+                <p className="hero-desc">Access barangay information, submit document requests, and monitor your requests online — anytime, anywhere.</p>
+                <div className="hero-btns">
+                  <button className="btn-primary" onClick={() => navTo('login')}>Resident Login</button>
+                  <button className="btn-outline" onClick={() => navTo('register')}>Create Resident Account</button>
+                </div>
               </div>
             </div>
 
-            {/* Documents Available */}
+            {/* Barangay Information */}
             <div className="section">
-              <h2 className="section-title">Available Documents</h2>
+              <h2 className="section-title">About This Portal</h2>
+              <p style={{ maxWidth: 720, margin: '0 auto 24px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15, lineHeight: 1.6 }}>
+                The Barangay 697 Zone 76 Resident Portal is an online service that lets registered residents request barangay documents, track their requests, and manage their resident information — without needing to visit the barangay hall for every transaction.
+              </p>
+              <div className="info-grid">
+                <div className="info-item">
+                  <div className="info-label">Address</div>
+                  <div className="info-value">1858 L. M. Guerrero St., Manila, Philippines, 1004</div>
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Office Hours</div>
+                  <div className="info-value">Monday–Sunday, 24/7</div>
+                </div>
+                <div className="info-item">
+                  <div className="info-label">Email</div>
+                  <div className="info-value">pb.brgy697@gmail.com</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Online Services */}
+            <div className="section section-muted">
+              <h2 className="section-title">Online Services</h2>
               <div className="doc-grid">
                 {DOCUMENTS.map((doc) => (
                   <div className="doc-card" key={doc.key}>
                     <div className="doc-icon"><DocIcon type={doc.key} /></div>
                     <h3 className="doc-name">{doc.name}</h3>
                     <p className="doc-desc">{doc.desc}</p>
-                    <button className="btn-link" onClick={goRequest}>Request Now →</button>
+                    <button className="btn-link" onClick={() => navTo('services')}>Learn more →</button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Contact / Info */}
+            {/* Resident Portal Features */}
+            <div className="section">
+              <h2 className="section-title">What You Can Do in My Account</h2>
+              <div className="doc-grid">
+                <div className="doc-card">
+                  <h3 className="doc-name">Request Documents</h3>
+                  <p className="doc-desc">Submit a document request online in a few simple steps, with your resident information filled in automatically.</p>
+                </div>
+                <div className="doc-card">
+                  <h3 className="doc-name">Track Your Requests</h3>
+                  <p className="doc-desc">See the real-time status of every request you've submitted, from pending to released.</p>
+                </div>
+                <div className="doc-card">
+                  <h3 className="doc-name">Notifications</h3>
+                  <p className="doc-desc">Get notified when your request is approved, ready for pickup, or needs attention.</p>
+                </div>
+                <div className="doc-card">
+                  <h3 className="doc-name">Digital Barangay ID</h3>
+                  <p className="doc-desc">View your resident identification with your uploaded photo, ready for the barangay to print.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Disaster / Emergency Response */}
             <div className="section section-muted">
-              <h2 className="section-title" style={{ width: '100%', textAlign: 'center' }}>Need Help?</h2>
-              <div className="info-grid">
-                <div className="info-item">
-                  <div>
-                    <div className="info-label">Address</div>
-                    <div className="info-value">1858 L. M. Guerrero St., Manila, Philippines, 1004</div>
-                  </div>
-                </div>
-                <div className="info-item">
-                  <div>
-                    <div className="info-label">Office Hours</div>
-                    <div className="info-value">Monday–Sunday, 24/7</div>
-                  </div>
-                </div>
-                <div className="info-item">
-                  <div>
-                    <div className="info-label">Email</div>
-                    <div className="info-value">pb.brgy697@gmail.com</div>
-                  </div>
-                </div>
+              <h2 className="section-title">Emergency &amp; Disaster Preparedness</h2>
+              <p style={{ maxWidth: 720, margin: '0 auto 24px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15, lineHeight: 1.6 }}>
+                In case of an emergency, stay calm, keep your family together, and follow instructions from barangay officials and local authorities. Keep emergency contact numbers accessible, prepare a basic emergency kit, and know your nearest evacuation area.
+              </p>
+              <div className="success-btns" style={{ marginTop: 8 }}>
+                <button className="btn-primary" onClick={() => navTo('hotlines')}>View Emergency Hotlines</button>
+              </div>
+            </div>
+
+            {/* Hotlines preview */}
+            <div className="section">
+              <h2 className="section-title">Emergency Hotlines</h2>
+              <p style={{ maxWidth: 620, margin: '0 auto 20px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15 }}>
+                Quick access to barangay and emergency contact numbers, whenever you need them.
+              </p>
+              <div className="success-btns">
+                <button className="btn-outline-dark" onClick={() => navTo('hotlines')}>View All Hotlines →</button>
+              </div>
+            </div>
+
+            {/* Gallery preview */}
+            <div className="section section-muted">
+              <h2 className="section-title">Community Gallery</h2>
+              <p style={{ maxWidth: 620, margin: '0 auto 20px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15 }}>
+                A look at barangay events, projects, and community activities.
+              </p>
+              <div className="success-btns">
+                <button className="btn-outline-dark" onClick={() => navTo('gallery')}>View Gallery →</button>
               </div>
             </div>
           </div>
