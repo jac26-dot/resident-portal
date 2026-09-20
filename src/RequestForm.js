@@ -111,7 +111,6 @@ const ResidentWizard = ({ verified, residentToken, onTrack, onBack }) => {
                   <div className="wizard-doc-option-desc">{DOC_INFO[t].desc}</div>
                   <div className="wizard-doc-option-meta">
                     <span>⏱ {DOC_INFO[t].processing}</span>
-                    <span>{DOC_INFO[t].fee}</span>
                   </div>
                 </button>
               ))}
@@ -196,7 +195,6 @@ const ResidentWizard = ({ verified, residentToken, onTrack, onBack }) => {
             <div className="track-detail-row"><span className="track-detail-label">Purpose</span><span className="track-detail-value">{purpose}</span></div>
             <div className="track-detail-row"><span className="track-detail-label">Requestor</span><span className="track-detail-value">{verified.lastName}, {verified.firstName}</span></div>
             <div className="track-detail-row"><span className="track-detail-label">Address</span><span className="track-detail-value">{verified.address}</span></div>
-            <div className="track-detail-row"><span className="track-detail-label">Fee</span><span className="track-detail-value">{info?.fee}</span></div>
             <div className="track-detail-row"><span className="track-detail-label">Supporting File</span><span className="track-detail-value">{file ? file.name : 'None attached'}</span></div>
 
             <button type="button" className="btn-primary btn-full" disabled={loading} onClick={handleSubmit} style={{ marginTop: 16 }}>

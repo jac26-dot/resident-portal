@@ -18,9 +18,8 @@ const Services = ({ onBack, onGoLogin }) => (
           <div style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>
             <strong style={{ color: 'var(--navy-deep)' }}>Requirements:</strong> {DOC_INFO[t].requirements.join(', ')}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, fontWeight: 700, color: 'var(--navy-deep)', marginTop: 6 }}>
+          <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--navy-deep)', marginTop: 6 }}>
             <span>⏱ {DOC_INFO[t].processing}</span>
-            <span>{DOC_INFO[t].fee}</span>
           </div>
         </div>
       ))}
