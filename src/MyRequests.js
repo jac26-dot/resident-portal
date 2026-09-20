@@ -128,7 +128,6 @@ const MyRequests = ({ initialFilter = 'All', title, onBack, onRequestDocument })
 
                   {expanded && (
                     <div className="myrequests-expanded">
-                      <div className="track-detail-row"><span className="track-detail-label">Fee</span><span className="track-detail-value">{r.fee > 0 ? `₱${parseFloat(r.fee).toFixed(2)}` : 'Free'}</span></div>
                       {r.requirementFileName && (
                         <div className="track-detail-row"><span className="track-detail-label">Uploaded File</span><span className="track-detail-value">{r.requirementFileName}</span></div>
                       )}
