@@ -5,7 +5,7 @@
    building + tools motifs.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
   /* Color */
@@ -24,11 +24,20 @@
   --line:        #e2dfd6;
 
   /* Type */
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --font-main: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--font-main);
+  --font-body: var(--font-main);
 
   /* Shape */
   --taper: 3px; /* the "shield taper" cut on one card corner */
+}
+
+/* Hard enforcement — every element uses Inter, no exceptions,
+   no old-style decorative font anywhere in the stack. */
+html, body, #root, *, *::before, *::after,
+h1, h2, h3, h4, h5, h6, p, span, a, li, label, small, strong, em, blockquote,
+button, input, select, textarea, option, table, th, td, nav, footer, header {
+  font-family: var(--font-main) !important;
 }
 
 * { box-sizing: border-box; }
