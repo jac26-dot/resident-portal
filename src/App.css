@@ -74,8 +74,14 @@ h1, h2, h3, .display {
   padding: 14px 32px;
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 1000;
   border-bottom: 3px solid var(--gold);
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.header.scrolled {
+  background: rgba(19, 42, 82, 0.92);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 .header-inner {
   max-width: 1180px;
@@ -109,34 +115,79 @@ h1, h2, h3, .display {
 .nav-toggle { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
 .nav-toggle span { width: 22px; height: 2px; background: #fff; display: block; }
 
-/* ---------- Hero (echoes the seal's divided navy/rose ring) ---------- */
-.hero {
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy) 55%, var(--navy-deep) 100%);
-  color: #fff;
-  padding: 64px 32px;
+/* ---------- Hero photo slideshow ---------- */
+.hero-slider {
   position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  color: #fff;
 }
-.hero::after {
-  content: '';
+.hero-slide {
   position: absolute;
-  top: -40%;
-  right: -10%;
-  width: 60%;
-  height: 220%;
-  background: var(--rose);
-  opacity: 0.14;
-  border-radius: 50%;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
-.hero-content { max-width: 780px; margin: 0 auto; text-align: center; position: relative; }
-.hero-top { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 8px; }
-.hero-logo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.5); flex-shrink: 0; }
-.hero-text { text-align: left; }
-.hero-badge { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--gold-tint); margin-bottom: 4px; }
-.hero-title { font-family: var(--font-display); font-size: 34px; font-weight: 600; margin: 0 0 4px; }
-.hero-sub { font-size: 15px; color: rgba(255,255,255,0.85); margin: 0; }
-.hero-desc { font-size: 15px; color: rgba(255,255,255,0.85); margin: 20px 0 26px; }
+.hero-slide.active { opacity: 1; }
+.hero-slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 25, 60, 0.55);
+}
+.hero-slider-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero-slider-logo {
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.45));
+  margin-bottom: 16px;
+}
+.hero-badge { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--gold-tint); margin-bottom: 8px; }
+.hero-slider-title { font-family: var(--font-display); font-size: 38px; font-weight: 700; margin: 0 0 6px; }
+.hero-slider-sub { font-size: 16px; color: rgba(255,255,255,0.9); margin: 0; }
+.hero-slider-desc { font-size: 15px; color: rgba(255,255,255,0.88); margin: 18px 0 26px; max-width: 560px; }
 .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.hero-slider-dots {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+.hero-slider-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.hero-slider-dot.active { background: var(--gold); width: 22px; border-radius: 5px; transition: width 0.2s; }
+
+@media (max-width: 640px) {
+  .hero-slider { min-height: 80vh; }
+  .hero-slider-logo { width: 130px; height: 130px; }
+  .hero-slider-title { font-size: 26px; }
+}
 
 /* ---------- Buttons ---------- */
 .btn-primary, .btn-outline, .btn-outline-dark, .btn-text-danger, .btn-danger {
@@ -1272,3 +1323,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   align-self: flex-start;
 }
 .activity-dot.unread { background: var(--crimson); }
+
+/* Anchor-scroll safety — so section headings clear the sticky navbar */
+#about-section, #services-section {
+  scroll-margin-top: 90px;
+}

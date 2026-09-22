@@ -13,6 +13,7 @@ import MyRequests from './MyRequests';
 import Notifications from './Notifications';
 import About from './About';
 import Services from './Services';
+import HeroSlider from './HeroSlider';
 import logo from './barangay-logo.jpg';
 import './App.css';
 
@@ -66,6 +67,26 @@ function App() {
   const [page, setPageState] = useState(pageFromHash);
   const [trackNumber, setTrackNumber] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // "About Barangay" and "Services" have real sections on Home —
+  // smooth-scroll to them if already on Home, otherwise navigate
+  // to Home first and scroll once it's rendered.
+  const scrollToHomeSection = (id) => {
+    if (page !== 'home') {
+      setPage('home');
+      setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 80);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+    setMenuOpen(false);
+  };
 
   // Central place every navigation goes through, so the URL hash
   // always matches what's on screen — this is what makes a page
@@ -104,7 +125,7 @@ function App() {
   return (
     <div className="app">
       {/* Header */}
-      <header className="header">
+      <header className={`header ${scrolled ? 'scrolled' : ''}`}>
         <div className="header-inner">
           <div className="header-left">
             <div className="header-title">Barangay 697 Zone 76</div>
@@ -124,13 +145,13 @@ function App() {
 
           <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
             <button className={`nav-btn ${page === 'home' ? 'active' : ''}`} onClick={() => navTo('home')}>Home</button>
-            <button className={`nav-btn ${page === 'about' ? 'active' : ''}`} onClick={() => navTo('about')}>About Barangay</button>
-            <button className={`nav-btn ${page === 'services' ? 'active' : ''}`} onClick={() => navTo('services')}>Services</button>
+            <button className={`nav-btn ${page === 'about' ? 'active' : ''}`} onClick={() => scrollToHomeSection('about-section')}>About Barangay</button>
+            <button className={`nav-btn ${page === 'services' ? 'active' : ''}`} onClick={() => scrollToHomeSection('services-section')}>Services</button>
             {residentLoggedIn ? (
               <button className={`nav-btn ${page === 'dashboard' ? 'active' : ''}`} onClick={goDashboard}>My Account</button>
             ) : (
               <>
-                <button className={`nav-btn ${page === 'login' ? 'active' : ''}`} onClick={() => navTo('login')}>Resident Login</button>
+                <button className={`nav-btn ${page === 'login' ? 'active' : ''}`} onClick={() => navTo('login')}>Login</button>
                 <button className={`nav-btn ${page === 'register' ? 'active' : ''}`} onClick={() => navTo('register')}>Register</button>
               </>
             )}
@@ -145,26 +166,20 @@ function App() {
         {page === 'home' && (
           <div>
             {/* Hero */}
-            <div className="hero">
-              <div className="hero-content">
-                <div className="hero-top">
-                  <img src={logo} alt="Barangay 697 Zone 76 Logo" className="hero-logo" />
-                  <div className="hero-text">
-                    <div className="hero-badge">Republic of the Philippines • City of Manila</div>
-                    <h1 className="hero-title">Barangay 697 Zone 76</h1>
-                    <p className="hero-sub">Online Resident Portal — Malate, Manila</p>
-                  </div>
-                </div>
-                <p className="hero-desc">Access barangay information, submit document requests, and monitor your requests online — anytime, anywhere.</p>
-                <div className="hero-btns">
-                  <button className="btn-primary" onClick={() => navTo('login')}>Resident Login</button>
-                  <button className="btn-outline" onClick={() => navTo('register')}>Create Resident Account</button>
-                </div>
+            <HeroSlider>
+              <img src={logo} alt="Barangay 697 Zone 76 Logo" className="hero-slider-logo" />
+              <div className="hero-badge">Republic of the Philippines • City of Manila</div>
+              <h1 className="hero-slider-title">Barangay 697 Zone 76</h1>
+              <p className="hero-slider-sub">Online Resident Portal — Malate, Manila</p>
+              <p className="hero-slider-desc">Access barangay information, submit document requests, and monitor your requests online — anytime, anywhere.</p>
+              <div className="hero-btns">
+                <button className="btn-primary" onClick={() => navTo('login')}>Login</button>
+                <button className="btn-outline" onClick={() => navTo('register')}>Register</button>
               </div>
-            </div>
+            </HeroSlider>
 
             {/* Barangay Information */}
-            <div className="section">
+            <div className="section" id="about-section">
               <h2 className="section-title">About This Portal</h2>
               <p style={{ maxWidth: 720, margin: '0 auto 24px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15, lineHeight: 1.6 }}>
                 The Barangay 697 Zone 76 Resident Portal is an online service that lets registered residents request barangay documents, track their requests, and manage their resident information — without needing to visit the barangay hall for every transaction.
@@ -186,7 +201,7 @@ function App() {
             </div>
 
             {/* Online Services */}
-            <div className="section section-muted">
+            <div className="section section-muted" id="services-section">
               <h2 className="section-title">Online Services</h2>
               <div className="doc-grid">
                 {DOCUMENTS.map((doc) => (

@@ -36,7 +36,7 @@ const Login = ({ onLoggedIn, onGoRegister, onBack }) => {
       {onBack && <button className="back-btn" onClick={onBack} type="button">← Back</button>}
 
       <div className="form-header" style={{ textAlign: 'center' }}>
-        <h2>Resident Login</h2>
+        <h2>Login</h2>
         <p>Log in to view your document requests and profile.</p>
       </div>
 
