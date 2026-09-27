@@ -14,7 +14,7 @@ import Notifications from './Notifications';
 import About from './About';
 import Services from './Services';
 import HeroSlider from './HeroSlider';
-import logo from './barangay-logo.jpg';
+import logo from './barangay-logo.png';
 import './App.css';
 
 // Simple, consistent line-style icons (no emoji) for each document type.
