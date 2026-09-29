@@ -16,6 +16,7 @@ import Services from './Services';
 import HeroSlider from './HeroSlider';
 import logo from './barangay-logo.png';
 import './App.css';
+import HomeSections from './HomeSections';
 
 // Simple, consistent line-style icons (no emoji) for each document type.
 const DocIcon = ({ type }) => {
@@ -239,37 +240,7 @@ function App() {
             </div>
 
             {/* Disaster / Emergency Response */}
-            <div className="section section-muted">
-              <h2 className="section-title">Emergency &amp; Disaster Preparedness</h2>
-              <p style={{ maxWidth: 720, margin: '0 auto 24px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15, lineHeight: 1.6 }}>
-                In case of an emergency, stay calm, keep your family together, and follow instructions from barangay officials and local authorities. Keep emergency contact numbers accessible, prepare a basic emergency kit, and know your nearest evacuation area.
-              </p>
-              <div className="success-btns" style={{ marginTop: 8 }}>
-                <button className="btn-primary" onClick={() => navTo('hotlines')}>View Emergency Hotlines</button>
-              </div>
-            </div>
-
-            {/* Hotlines preview */}
-            <div className="section">
-              <h2 className="section-title">Emergency Hotlines</h2>
-              <p style={{ maxWidth: 620, margin: '0 auto 20px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15 }}>
-                Quick access to barangay and emergency contact numbers, whenever you need them.
-              </p>
-              <div className="success-btns">
-                <button className="btn-outline-dark" onClick={() => navTo('hotlines')}>View All Hotlines →</button>
-              </div>
-            </div>
-
-            {/* Gallery preview */}
-            <div className="section section-muted">
-              <h2 className="section-title">Community Gallery</h2>
-              <p style={{ maxWidth: 620, margin: '0 auto 20px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15 }}>
-                A look at barangay events, projects, and community activities.
-              </p>
-              <div className="success-btns">
-                <button className="btn-outline-dark" onClick={() => navTo('gallery')}>View Gallery →</button>
-              </div>
-            </div>
+            <HomeSections navTo={navTo} />
           </div>
         )}
 
