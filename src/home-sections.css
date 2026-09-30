@@ -282,3 +282,18 @@
   .info-cards-grid { grid-template-columns: 1fr; }
   .profile-actions { flex-wrap: wrap; }
 }
+
+/* ===== Header and footer: edge to edge ===== */
+.header .header-inner,
+.footer .footer-inner {
+  width: 100% !important; max-width: none !important; margin: 0 !important;
+  box-sizing: border-box !important;
+  padding-left: clamp(16px, 2.5vw, 40px) !important;
+  padding-right: clamp(16px, 2.5vw, 40px) !important;
+}
+.header .header-inner {
+  display: flex !important; align-items: center !important; justify-content: space-between !important;
+}
+.footer .footer-inner {
+  display: flex !important; align-items: flex-start !important; justify-content: space-between !important;
+}
