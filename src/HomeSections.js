@@ -7,12 +7,12 @@ const IMG = `${process.env.PUBLIC_URL || ''}/images/gallery`;
 const HOTLINES = [
   { id: 'barangay', icon: 'landmark', name: 'Barangay Office', number: '', cta: 'Call Barangay',
     desc: 'Reach the barangay hall for assistance, reports, and community concerns.' },
-  { id: 'police', icon: 'shield', name: 'Police', number: '', cta: 'Call Police',
-    desc: 'Report crimes, threats, or situations that need police assistance.' },
-  { id: 'fire', icon: 'flame', name: 'Fire & Rescue', number: '', cta: 'Call Fire & Rescue',
-    desc: 'Report fires and request rescue services.' },
-  { id: 'medical', icon: 'medical', name: 'Medical Emergency', number: '', cta: 'Call for Medical Help',
-    desc: 'Request an ambulance or urgent medical assistance.' },
+  { id: 'police', icon: 'shield', name: 'Police', number: '(02) 8523-8378', cta: 'Call Police',
+    desc: 'Manila Police District. Report crimes, threats, or situations that need police assistance.' },
+  { id: 'fire', icon: 'flame', name: 'Fire & Rescue', number: '(02) 8426-0219', cta: 'Call Fire & Rescue',
+    desc: 'Bureau of Fire Protection. Report fires and request rescue services.' },
+  { id: 'medical', icon: 'medical', name: 'Medical Emergency', number: '143', cta: 'Call for Medical Help',
+    desc: 'Philippine Red Cross. Request an ambulance or urgent medical assistance.' },
 ];
 
 const ICONS = {
