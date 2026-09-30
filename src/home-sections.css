@@ -183,3 +183,49 @@
 @media (max-width: 480px) {
   #services-section .doc-grid { grid-template-columns: 1fr !important; }
 }
+
+/* ===== Home page type scale: medium (14-16px body, 24-28px headings) ===== */
+@media (min-width: 1700px) { html { font-size: 16px; } }
+@media (min-width: 2100px) { html { font-size: 16px; } }
+
+/* Section headings */
+.main .section .section-title, .hs-title { font-size: 28px; line-height: 1.25; }
+.main .section .section-title::after, .hs-title::after { margin-top: 10px; }
+
+/* Intro / lead paragraphs */
+#about-section > p, #about-section .section-desc, .hs-lead { font-size: 16px; line-height: 1.65; }
+
+/* Card titles */
+.main .doc-name, .hs-card h3, .hs-photo h3 { font-size: 16px; line-height: 1.35; }
+
+/* Body text */
+.main .doc-desc, .main .info-value, .hs-desc, .hs-list, .hs-photo p, .hs-extra { font-size: 15px; line-height: 1.6; }
+
+/* Small supporting text (14px minimum) */
+.main .info-label, .hs-tag, .hs-lb-nav span { font-size: 14px; }
+
+/* Buttons and links */
+.main .btn-link, .hs-btn, .hs-link, .main .btn-primary, .main .btn-outline, .main .btn-outline-dark { font-size: 15px; }
+
+/* Hotline numbers */
+.hs-number { font-size: 22px; }
+.hs-number.hs-pending { font-size: 15px; line-height: 1.4; }
+
+/* Hero */
+.hero-badge { font-size: 14px; }
+.hero-slider-title { font-size: clamp(30px, 4vw, 44px); line-height: 1.15; }
+.hero-slider-sub { font-size: 18px; }
+.hero-slider-desc { font-size: 16px; line-height: 1.6; }
+
+/* Header and footer text */
+.header-title { font-size: 18px; }
+.header-sub { font-size: 14px; }
+.nav-btn { font-size: 15px; }
+.footer-title { font-size: 16px; }
+.footer-main, .footer-links, .footer-links a, .footer-links button { font-size: 14px; }
+.footer-copyright { font-size: 14px; }
+
+@media (max-width: 720px) {
+  .main .section .section-title, .hs-title { font-size: 24px; }
+  .hero-slider-title { font-size: clamp(26px, 7vw, 34px); }
+}
