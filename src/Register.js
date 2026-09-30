@@ -86,7 +86,7 @@ const Register = ({ onDone, onGoLogin, onBack }) => {
   }
 
   return (
-    <div className="section">
+    <div className="section auth-register">
       {onBack && <button className="back-btn" onClick={onBack} type="button">← Back</button>}
       <div className="form-header" style={{ textAlign: 'center' }}>
         <h2>Create a Resident Account</h2>
