@@ -149,3 +149,37 @@
 /* Card titles on the navy section were dark blue and hard to read */
 .hs-card-dark h3 { color: #fff; }
 .hs-card-dark .hs-list, .hs-card-dark .hs-extra { color: #eef2fa; }
+
+/* ===== Online Services: centered heading, equal cards, balanced text ===== */
+#services-section { display: block !important; }
+#services-section > * {
+  width: 100% !important; max-width: 1240px !important;
+  margin-left: auto !important; margin-right: auto !important; float: none !important;
+}
+#services-section .section-title {
+  text-align: center !important; font-size: 28px !important; line-height: 1.25 !important;
+  margin-bottom: 28px !important;
+}
+#services-section .doc-grid {
+  display: grid !important; gap: 20px !important; align-items: stretch !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+}
+#services-section .doc-card {
+  display: flex !important; flex-direction: column !important; align-items: center !important;
+  width: auto !important; min-width: 0 !important; height: 100% !important;
+  padding: 24px 16px !important; text-align: center !important;
+}
+#services-section .doc-icon { margin: 0 auto 14px !important; }
+#services-section .doc-name { font-size: 16px !important; line-height: 1.35 !important; margin: 0 0 8px !important; }
+#services-section .doc-desc { font-size: 14.5px !important; line-height: 1.55 !important; flex: 1 !important; margin: 0 0 16px !important; }
+#services-section .btn-link { font-size: 14.5px !important; margin-top: auto !important; }
+@media (max-width: 1100px) {
+  #services-section .doc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 720px) {
+  #services-section .section-title { font-size: 24px !important; }
+  #services-section .doc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 14px !important; }
+}
+@media (max-width: 480px) {
+  #services-section .doc-grid { grid-template-columns: 1fr !important; }
+}
