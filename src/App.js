@@ -130,7 +130,7 @@ function App() {
         <div className="header-inner">
           <div className="header-left">
             <div className="header-title">Barangay 697 Zone 76</div>
-            <div className="header-sub">Malate, Manila — Zone 76 e-Serbisyo</div>
+            <div className="header-sub">Malate, Manila, District V, City of Manila</div>
           </div>
 
           <button
@@ -148,16 +148,17 @@ function App() {
             <button className={`nav-btn ${page === 'home' ? 'active' : ''}`} onClick={() => navTo('home')}>Home</button>
             <button className={`nav-btn ${page === 'about' ? 'active' : ''}`} onClick={() => scrollToHomeSection('about-section')}>About Barangay</button>
             <button className={`nav-btn ${page === 'services' ? 'active' : ''}`} onClick={() => scrollToHomeSection('services-section')}>Services</button>
-            {residentLoggedIn ? (
+            {residentLoggedIn && (
               <button className={`nav-btn ${page === 'dashboard' ? 'active' : ''}`} onClick={goDashboard}>My Account</button>
-            ) : (
+            )}
+            <button className={`nav-btn ${page === 'hotlines' ? 'active' : ''}`} onClick={() => navTo('hotlines')}>Hotlines</button>
+            <button className={`nav-btn ${page === 'gallery' ? 'active' : ''}`} onClick={() => navTo('gallery')}>Gallery</button>
+            {!residentLoggedIn && (
               <>
                 <button className={`nav-btn ${page === 'login' ? 'active' : ''}`} onClick={() => navTo('login')}>Login</button>
                 <button className={`nav-btn ${page === 'register' ? 'active' : ''}`} onClick={() => navTo('register')}>Register</button>
               </>
             )}
-            <button className={`nav-btn ${page === 'hotlines' ? 'active' : ''}`} onClick={() => navTo('hotlines')}>Hotlines</button>
-            <button className={`nav-btn ${page === 'gallery' ? 'active' : ''}`} onClick={() => navTo('gallery')}>Gallery</button>
           </nav>
         </div>
       </header>
