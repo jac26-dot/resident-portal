@@ -270,12 +270,6 @@ function App() {
             <div>Malate, Manila, District V, City of Manila</div>
           </div>
           <div className="footer-links">
-            <button onClick={() => navTo('home')}>Home</button>
-            <button onClick={() => navTo('about')}>About</button>
-            <button onClick={() => navTo('services')}>Services</button>
-            {residentLoggedIn && <button onClick={goDashboard}>My Account</button>}
-            <button onClick={() => navTo('hotlines')}>Hotlines</button>
-            <button onClick={() => navTo('gallery')}>Gallery</button>
             <button onClick={() => navTo('terms')}>Terms &amp; Conditions</button>
             <button onClick={() => navTo('privacy')}>Privacy Notice</button>
           </div>
