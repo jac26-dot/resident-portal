@@ -116,3 +116,36 @@
   .hs-card, .hs-btn, .hs-photo-btn img { transition: none; }
   .hs-card:hover, .hs-photo-btn:hover img { transform: none; }
 }
+
+/* ===== Size fixes for large screens (appended) ===== */
+:root { --hs-w: 1320px; }
+@media (min-width: 1700px) { html { font-size: 18px; } :root { --hs-w: 1500px; } }
+@media (min-width: 2100px) { html { font-size: 20px; } :root { --hs-w: 1640px; } }
+
+.main .section, .hs-wrap { max-width: var(--hs-w); }
+.main .section-muted { max-width: none; }
+.main .section-muted > * { max-width: var(--hs-w); }
+
+/* Remove the old long underline, center every section title */
+.main .section .section-title { border-bottom: 0; display: block; width: 100%; text-align: center; font-size: clamp(1.875rem, 2.8vw, 2.375rem); }
+
+/* Bigger text */
+#about-section > p, #about-section .section-desc { max-width: 780px; margin: 16px auto 28px; text-align: center; font-size: 1.125rem; line-height: 1.7; }
+.main .info-label { font-size: 1rem; }
+.main .info-value { font-size: 1.125rem; }
+.main .doc-name { font-size: 1.1875rem; }
+.main .doc-desc { font-size: 1.0625rem; }
+.main .btn-link { font-size: 1.0625rem; }
+.hs-lead { font-size: 1.125rem; max-width: 760px; }
+.hs-card h3 { font-size: 1.1875rem; }
+.hs-list { font-size: 1.0625rem; }
+.hs-btn, .hs-link { font-size: 1rem; }
+.hs-number { font-size: 1.625rem; }
+.hs-desc { font-size: 1.0625rem; }
+.hs-photo h3 { font-size: 1.25rem; }
+.hs-photo p { font-size: 1rem; }
+.hs-tag { font-size: .875rem; }
+
+/* Card titles on the navy section were dark blue and hard to read */
+.hs-card-dark h3 { color: #fff; }
+.hs-card-dark .hs-list, .hs-card-dark .hs-extra { color: #eef2fa; }
