@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import PasswordInput from './PasswordInput';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
@@ -50,7 +51,7 @@ const Login = ({ onLoggedIn, onGoRegister, onBack }) => {
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="login-password">Password *</label>
-            <input id="login-password" className="form-control" type="password" name="password" value={form.password} onChange={handleChange} required aria-required="true" />
+            <PasswordInput id="login-password" className="form-control" type="password" name="password" value={form.password} onChange={handleChange} required aria-required="true" />
           </div>
         </div>
 

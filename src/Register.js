@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import PasswordInput from './PasswordInput';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
@@ -154,7 +155,7 @@ const Register = ({ onDone, onGoLogin, onBack }) => {
           <div className="form-row">
             <div className="form-group">
               <label className="form-label" htmlFor="reg-password">Password *</label>
-              <input id="reg-password" className="form-control" type="password" name="password" value={form.password} onChange={handleChange} required aria-required="true" aria-describedby="pw-strength" />
+              <PasswordInput id="reg-password" className="form-control" type="password" name="password" value={form.password} onChange={handleChange} required aria-required="true" aria-describedby="pw-strength" />
               {form.password && (
                 <div id="pw-strength" style={{ marginTop: 6 }}>
                   <div style={{ height: 5, background: '#eef1f5', borderRadius: 3, overflow: 'hidden' }}>
@@ -166,7 +167,7 @@ const Register = ({ onDone, onGoLogin, onBack }) => {
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="reg-confirm">Confirm Password *</label>
-              <input id="reg-confirm" className="form-control" type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required aria-required="true" />
+              <PasswordInput id="reg-confirm" className="form-control" type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required aria-required="true" />
               {form.confirmPassword && form.password !== form.confirmPassword && (
                 <span style={{ fontSize: 12, color: '#c81e1e' }}>Passwords do not match.</span>
               )}
