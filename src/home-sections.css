@@ -556,3 +556,12 @@
 @media (max-width: 700px) { .info-cards-grid { grid-template-columns: 1fr; } .quick-actions-grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .summary-card, .quick-action { transition: none; } .summary-card:hover, .quick-action:hover { transform: none; } }
 
+
+/* ===== Single featured photo ===== */
+.hs-gallery:has(.hs-photo:only-child) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; max-width: 900px; margin: 0 auto; }
+.hs-gallery:has(.hs-photo:only-child) .hs-feature { grid-row: auto; }
+.hs-gallery:has(.hs-photo:only-child) .hs-photo-btn { min-height: 420px; }
+.hs-lb-nav[hidden] { display: none; }
+@media (max-width: 600px) { .hs-gallery:has(.hs-photo:only-child) .hs-photo-btn { min-height: 260px; } }
+
+.gallery-grid:has(.gallery-item:only-child) { grid-template-columns: minmax(0, 900px) !important; justify-content: center; }

@@ -44,18 +44,18 @@ const KIT = ['Drinking water', 'Food', 'Flashlight', 'First-aid kit', 'Batteries
 const TOPICS = ['Earthquake', 'Fire', 'Flood', 'Severe weather'];
 
 const PHOTOS = [
-  { id: 'event', label: 'Community', title: 'Barangay Community Event',
-    desc: 'Residents and families coming together for a community activity.',
-    alt: 'Children playing a game in the street beside the Barangay 697 Zone 76 tent while residents watch',
-    base: 'community-event', sizes: [640, 1200], w: 1200, h: 900, pos: 'center 55%' },
-  { id: 'response', label: 'Emergency response', title: 'Emergency Response',
-    desc: 'Supporting the community through emergency response and assistance.',
-    alt: 'A DRRMO ambulance parked at night with a responder standing at the open door',
-    base: 'emergency-response', sizes: [640, 1200], w: 1200, h: 900, pos: 'center 60%' },
-  { id: 'cleanup', label: 'Community service', title: 'Community Clean-Up Drive',
-    desc: 'Community members working together to maintain a clean and safe neighborhood.',
-    alt: 'Barangay workers in rain ponchos sweeping a wet street',
-    base: 'community-cleanup', sizes: [600, 900], w: 900, h: 1200, pos: 'center 62%' },
+  { id: 'mural-1', label: 'Gallery', title: 'Colorful Mural',
+    desc: 'A painted mural of musicians and flowers.',
+    alt: 'A colorful painted mural showing musicians, a woman with a cello, and flowers',
+    base: 'gallery-photo', sizes: [800, 1600], w: 1600, h: 1200, pos: 'center' },
+  { id: 'mural-2', label: 'Mural detail', title: 'Musicians',
+    desc: 'Detail of the guitars and cello in the mural.',
+    alt: 'Close-up of painted guitars and a cello in the mural',
+    base: 'gallery-detail-1', sizes: [640, 1200], w: 1200, h: 900, pos: 'center' },
+  { id: 'mural-3', label: 'Mural detail', title: 'Faces and Flowers',
+    desc: 'Detail of the painted faces and lotus flowers.',
+    alt: 'Close-up of a painted face and lotus flowers in the mural',
+    base: 'gallery-detail-2', sizes: [640, 1200], w: 1200, h: 900, pos: 'center' },
 ];
 
 const src = (p, i) => `${IMG}/${p.base}-${p.sizes[i]}.jpg`;
@@ -98,7 +98,7 @@ function Lightbox({ index, onClose, onMove }) {
           <h3>{p.title}</h3>
           <p>{p.desc}</p>
         </div>
-        <div className="hs-lb-nav">
+        <div className="hs-lb-nav" hidden={PHOTOS.length < 2}>
           <button onClick={() => onMove(-1)} aria-label="Previous photo">← Previous</button>
           <span>{index + 1} / {PHOTOS.length}</span>
           <button onClick={() => onMove(1)} aria-label="Next photo">Next →</button>

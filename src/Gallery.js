@@ -16,13 +16,13 @@ const Gallery = () => {
     <div className="section">
       <div className="form-header" style={{ padding: 0, marginBottom: 32, textAlign: 'center' }}>
         <h2>Community Gallery</h2>
-        <p>Photos from barangay clean-up drives and community activities.</p>
+        <p>Photos from Barangay 697 Zone 76.</p>
       </div>
 
       <div className="gallery-grid">
         {PHOTOS.map((src) => (
           <div className="gallery-item" key={src}>
-            <img src={src} alt="Barangay 697 community activity" loading="lazy" />
+            <img src={src} alt="A colorful painted mural of musicians and flowers" loading="lazy" />
           </div>
         ))}
       </div>
@@ -31,3 +31,4 @@ const Gallery = () => {
 };
 
 export default Gallery;
+
