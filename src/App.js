@@ -17,6 +17,7 @@ import HeroSlider from './HeroSlider';
 import logo from './barangay-logo.png';
 import './App.css';
 import HomeSections from './HomeSections';
+import brand from './brand';
 
 // Simple, consistent line-style icons (no emoji) for each document type.
 const DocIcon = ({ type }) => {
@@ -129,8 +130,8 @@ function App() {
       <header className={`header ${scrolled ? 'scrolled' : ''}`}>
         <div className="header-inner">
           <div className="header-left">
-            <div className="header-title">Barangay 697 Zone 76</div>
-            <div className="header-sub">Malate, Manila, District V, City of Manila</div>
+            <img src={brand.logoHorizontalLight} alt={brand.productName} className="header-logo" />
+            <div className="header-sub">{brand.organizationName}</div>
           </div>
 
           <button
@@ -169,10 +170,10 @@ function App() {
           <div>
             {/* Hero */}
             <HeroSlider>
-              <img src={logo} alt="Barangay 697 Zone 76 Logo" className="hero-slider-logo" />
-              <div className="hero-badge">Republic of the Philippines • City of Manila</div>
-              <h1 className="hero-slider-title">Barangay 697 Zone 76</h1>
-              <p className="hero-slider-sub">Online Resident Portal — Malate, Manila</p>
+              <img src={logo} alt={brand.productName} className="hero-slider-logo" />
+              <div className="hero-badge">{brand.appName}</div>
+              <h1 className="hero-slider-title">{brand.organizationName}</h1>
+              <p className="hero-slider-sub">Online Resident Portal</p>
               <p className="hero-slider-desc">Access barangay information, submit document requests, and monitor your requests online — anytime, anywhere.</p>
               <div className="hero-btns">
                 <button className="btn-primary" onClick={() => navTo('login')}>Login</button>
@@ -184,7 +185,7 @@ function App() {
             <div className="section" id="about-section">
               <h2 className="section-title">About This Portal</h2>
               <p style={{ maxWidth: 720, margin: '0 auto 24px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15, lineHeight: 1.6 }}>
-                The Barangay 697 Zone 76 Resident Portal is an online service that lets registered residents request barangay documents, track their requests, and manage their resident information — without needing to visit the barangay hall for every transaction.
+                The Barangay Malate, Manila, District V, City of Manila Resident Portal is an online service that lets registered residents request barangay documents, track their requests, and manage their resident information — without needing to visit the barangay hall for every transaction.
               </p>
               <div className="info-grid">
                 <div className="info-item">
@@ -266,15 +267,15 @@ function App() {
       <footer className="footer">
         <div className="footer-inner">
           <div className="footer-main">
-            <div className="footer-title">Barangay 697 Zone 76</div>
-            <div>Malate, Manila, District V, City of Manila</div>
+            <div className="footer-title">{brand.organizationName}</div>
+            <div>{brand.appName}</div>
           </div>
           <div className="footer-links">
             <button onClick={() => navTo('terms')}>Terms &amp; Conditions</button>
             <button onClick={() => navTo('privacy')}>Privacy Notice</button>
           </div>
         </div>
-        <div className="footer-copyright">© {new Date().getFullYear()} Barangay Management System</div>
+        <div className="footer-copyright">&copy; {new Date().getFullYear()} {brand.productName}. {brand.appName}.</div>
       </footer>
     </div>
   );

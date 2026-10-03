@@ -72,7 +72,7 @@ const Hotlines = () => {
         ))}
       </div>
 
-      <div className="hotline-footer-note">Barangay 697 Zone 76, District 5</div>
+      <div className="hotline-footer-note">Barangay Malate, Manila, District V, City of Manila, District 5</div>
     </div>
   );
 };

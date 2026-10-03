@@ -46,9 +46,9 @@ const Login = ({ onLoggedIn, onGoRegister, onBack }) => {
 
         <div className="auth-card">
           <aside className="auth-aside">
-            <img src={logo} alt="Barangay 697 Zone 76 logo" className="auth-logo" />
+            <img src={logo} alt="Barangay Malate, Manila, District V, City of Manila logo" className="auth-logo" />
             <h2>Welcome back</h2>
-            <p>Barangay 697 Zone 76 e-Serbisyo. Your barangay services, online.</p>
+            <p>Barangay Malate, Manila, District V, City of Manila. Your barangay services, online.</p>
             <ul className="auth-points">
               {POINTS.map((p) => (
                 <li key={p.text}>

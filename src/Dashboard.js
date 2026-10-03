@@ -163,7 +163,7 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
       <div className="account-welcome">
         <div className="account-welcome-inner">
           <h1>{greeting()}, {resident?.firstName || 'Resident'}.</h1>
-          <p>Welcome to your Barangay 697 Zone 76 Resident Portal. Manage your information, request documents, and track your requests — all in one place.</p>
+          <p>Welcome to your Barangay Malate, Manila, District V, City of Manila Resident Portal. Manage your information, request documents, and track your requests — all in one place.</p>
         </div>
       </div>
 
@@ -261,8 +261,8 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
           <div className="info-card">
             <h4>Residential Information</h4>
             <div className="info-row"><span>Address</span><strong>{resident?.address || '—'}</strong></div>
-            <div className="info-row"><span>Barangay</span><strong>Barangay 697</strong></div>
-            <div className="info-row"><span>Zone</span><strong>Zone 76</strong></div>
+            <div className="info-row"><span>Barangay</span><strong>Malate</strong></div>
+            <div className="info-row"><span>District</span><strong>District V</strong></div>
             <div className="info-row"><span>City</span><strong>Manila</strong></div>
           </div>
           <div className="info-card">
@@ -460,7 +460,7 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
             <div className="id-card">
               <div className="id-card-header">
                 <div>
-                  <div className="id-card-brgy">Barangay 697 Zone 76</div>
+                  <div className="id-card-brgy">Barangay Malate, Manila, District V, City of Manila</div>
                   <div className="id-card-sub">Resident Identification</div>
                 </div>
               </div>
@@ -474,7 +474,7 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
                   <div className="id-card-name">{fullName}</div>
                   <div className="id-card-row"><span>Address</span><strong>{resident?.address || '—'}</strong></div>
                   <div className="id-card-row"><span>Resident Record No.</span><strong>{resident?.id ? `RES-${String(resident.id).padStart(6, '0')}` : '—'}</strong></div>
-                  <div className="id-card-row"><span>Barangay</span><strong>697, Zone 76</strong></div>
+                  <div className="id-card-row"><span>Barangay</span><strong>Malate, District V</strong></div>
                   <div className="id-card-row"><span>Status</span><strong>{resident?.status || 'Active'}</strong></div>
                 </div>
               </div>

@@ -44,18 +44,18 @@ const KIT = ['Drinking water', 'Food', 'Flashlight', 'First-aid kit', 'Batteries
 const TOPICS = ['Earthquake', 'Fire', 'Flood', 'Severe weather'];
 
 const PHOTOS = [
-  { id: 'mural-1', label: 'Gallery', title: 'Colorful Mural',
-    desc: 'A painted mural of musicians and flowers.',
+  { id: 'mural-1', label: 'Gallery', title: 'Colorful Community Mural',
+    desc: 'A vibrant mural celebrating community, culture, music, and local creativity.',
     alt: 'A colorful painted mural showing musicians, a woman with a cello, and flowers',
     base: 'gallery-photo', sizes: [800, 1600], w: 1600, h: 1200, pos: 'center' },
-  { id: 'mural-2', label: 'Mural detail', title: 'Musicians',
-    desc: 'Detail of the guitars and cello in the mural.',
-    alt: 'Close-up of painted guitars and a cello in the mural',
-    base: 'gallery-detail-1', sizes: [640, 1200], w: 1200, h: 900, pos: 'center' },
-  { id: 'mural-3', label: 'Mural detail', title: 'Faces and Flowers',
-    desc: 'Detail of the painted faces and lotus flowers.',
+  { id: 'mural-2', label: 'Community Art', title: 'Faces and Flowers',
+    desc: 'A colorful display of painted faces and lotus flowers representing creativity and community.',
     alt: 'Close-up of a painted face and lotus flowers in the mural',
     base: 'gallery-detail-2', sizes: [640, 1200], w: 1200, h: 900, pos: 'center' },
+  { id: 'mural-3', label: 'Community Art', title: 'Music and Community',
+    desc: 'A detailed mural featuring musical instruments and artistic expressions.',
+    alt: 'Close-up of painted guitars and a cello in the mural',
+    base: 'gallery-detail-1', sizes: [640, 1200], w: 1200, h: 900, pos: 'center' },
 ];
 
 const src = (p, i) => `${IMG}/${p.base}-${p.sizes[i]}.jpg`;
@@ -175,7 +175,7 @@ export default function HomeSections({ navTo }) {
       <section className="hs-section hs-muted" id="gallery-section">
         <div className="hs-wrap">
           <h2 className="hs-title">Community Gallery</h2>
-          <p className="hs-lead">Moments from Barangay 697 Zone 76: events, emergency response, and community service.</p>
+          <p className="hs-lead">Moments from Barangay Malate, Manila, District V, City of Manila.</p>
           <div className="hs-gallery">
             {PHOTOS.map((p, i) => (
               <figure className={`hs-photo ${i === 0 ? 'hs-feature' : ''}`} key={p.id}>

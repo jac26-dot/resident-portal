@@ -565,3 +565,8 @@
 @media (max-width: 600px) { .hs-gallery:has(.hs-photo:only-child) .hs-photo-btn { min-height: 260px; } }
 
 .gallery-grid:has(.gallery-item:only-child) { grid-template-columns: minmax(0, 900px) !important; justify-content: center; }
+
+/* ===== Brand header logo ===== */
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header-logo { height: 36px; width: auto; display: block; }
+@media (max-width: 720px) { .header-logo { height: 30px; } }
