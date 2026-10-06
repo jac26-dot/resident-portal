@@ -10,8 +10,8 @@ const brand = {
   shortName: 'Barangay Malate',
   location: 'Malate, Manila, District V, City of Manila',
   contact: {
-    address: '1858 L. M. Guerrero St., Manila, Philippines, 1004',
-    email: 'pb.brgy697@gmail.com',
+    address: '123 Sample Street, Sample City, Philippines 0000',
+    email: 'info@barangay-sample.example',
     hours: 'Monday-Sunday, 24/7',
   },
   logoIcon,

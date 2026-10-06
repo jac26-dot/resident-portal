@@ -1,4 +1,5 @@
 import React from 'react';
+import brand from './brand';
 
 const Privacy = ({ onBack }) => (
   <div className="section legal-page">
@@ -6,7 +7,7 @@ const Privacy = ({ onBack }) => (
 
     <div className="legal-header">
       <h2>Privacy Notice</h2>
-      <p>Barangay Malate, Manila, District V, City of Manila Resident Portal</p>
+      <p>{brand.organizationName} Resident Portal</p>
     </div>
 
     <div className="legal-body">
@@ -26,7 +27,7 @@ const Privacy = ({ onBack }) => (
       <p>Details of your document requests (type, purpose, status, and control number) are stored so you and barangay staff can track the request from submission to release.</p>
 
       <h3>Data Sharing/Disclosure</h3>
-      <p>Your information is used internally by Barangay Malate, Manila, District V, City of Manila for resident record-keeping and document processing. We do not sell your information. Information may be disclosed if required by law or a valid government request.</p>
+      <p>Your information is used internally by {brand.organizationName} for resident record-keeping and document processing. We do not sell your information. Information may be disclosed if required by law or a valid government request.</p>
 
       <h3>Data Retention</h3>
       <p>Resident records and document request history are retained as part of the barangay's official records-keeping practices. If an account or resident record is removed from active use, it may be archived rather than permanently deleted, so that related document request history remains intact.</p>
@@ -44,7 +45,7 @@ const Privacy = ({ onBack }) => (
       <p>The Portal does not currently share your information with third-party services beyond what is necessary to operate the barangay's own systems.</p>
 
       <h3>Contact Information / Privacy Inquiries</h3>
-      <p>For questions or concerns about how your information is handled, please contact the Barangay Malate, Manila, District V, City of Manila office at pb.brgy697@gmail.com or visit during office hours.</p>
+      <p>For questions or concerns about how your information is handled, please contact the {brand.organizationName} office at {brand.contact.email} or visit during office hours.</p>
     </div>
   </div>
 );

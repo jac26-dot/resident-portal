@@ -1,4 +1,5 @@
 import React from 'react';
+import brand from './brand';
 
 const About = ({ onBack }) => (
   <div className="section">
@@ -24,11 +25,11 @@ const About = ({ onBack }) => (
         <p>The barangay hall serves as the main point of contact for document requests, community concerns, and local government transactions. Residents are encouraged to visit the office in person for transactions that require physical verification, such as claiming approved documents.</p>
 
         <h3>Contact Information</h3>
-        <p>Email: pb.brgy697@gmail.com</p>
-        <p>Address: 1858 L. M. Guerrero St., Manila, Philippines, 1004</p>
+        <p>Email: {brand.contact.email}</p>
+        <p>Address: {brand.contact.address}</p>
 
         <h3>Office Hours</h3>
-        <p>Monday – Sunday, 24/7</p>
+        <p>{brand.contact.hours}</p>
 
         <h3>Barangay Location</h3>
         <p>Barangay Malate, Manila, District V, City of Manila, Malate, Manila, District V, City of Manila, Philippines.</p>

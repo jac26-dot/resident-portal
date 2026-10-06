@@ -1,4 +1,5 @@
 import React from 'react';
+import brand from './brand';
 
 const Terms = ({ onBack }) => (
   <div className="section legal-page">
@@ -6,15 +7,15 @@ const Terms = ({ onBack }) => (
 
     <div className="legal-header">
       <h2>Terms and Conditions</h2>
-      <p>Barangay Malate, Manila, District V, City of Manila Resident Portal</p>
+      <p>{brand.organizationName} Resident Portal</p>
     </div>
 
     <div className="legal-body">
       <h3>1. Introduction</h3>
-      <p>These Terms and Conditions govern your use of the Barangay Malate, Manila, District V, City of Manila Resident Portal ("the Portal"), an online service that allows residents to register an account, request barangay documents, and track the status of their requests. By using the Portal, you agree to these terms.</p>
+      <p>These Terms and Conditions govern your use of the {brand.organizationName} Resident Portal ("the Portal"), an online service that allows residents to register an account, request barangay documents, and track the status of their requests. By using the Portal, you agree to these terms.</p>
 
       <h3>2. Eligibility</h3>
-      <p>The Portal is intended for residents of Barangay Malate, Manila, District V, City of Manila, Malate, Manila. Account registration requires accurate personal information that matches, or can be matched against, the barangay's resident records. Accounts are reviewed and approved by barangay administrators before full access is granted.</p>
+      <p>The Portal is intended for residents of {brand.organizationName}, Malate, Manila. Account registration requires accurate personal information that matches, or can be matched against, the barangay's resident records. Accounts are reviewed and approved by barangay administrators before full access is granted.</p>
 
       <h3>3. Resident Accounts</h3>
       <p>You are responsible for the accuracy of the information you provide when registering. Submitting false or misleading information may result in your registration being rejected or your account being suspended.</p>
@@ -41,7 +42,7 @@ const Terms = ({ onBack }) => (
       <p>These Terms may be updated from time to time to reflect changes in barangay procedures or the Portal's features. Continued use of the Portal after changes are posted constitutes acceptance of the updated Terms.</p>
 
       <h3>11. Contact Information</h3>
-      <p>For questions about these Terms, please contact the Barangay Malate, Manila, District V, City of Manila office at pb.brgy697@gmail.com or visit during office hours.</p>
+      <p>For questions about these Terms, please contact the {brand.organizationName} office at {brand.contact.email} or visit during office hours.</p>
     </div>
   </div>
 );

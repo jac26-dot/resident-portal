@@ -190,15 +190,15 @@ function App() {
               <div className="info-grid">
                 <div className="info-item">
                   <div className="info-label">Address</div>
-                  <div className="info-value">1858 L. M. Guerrero St., Manila, Philippines, 1004</div>
+                  <div className="info-value">{brand.contact.address}</div>
                 </div>
                 <div className="info-item">
                   <div className="info-label">Office Hours</div>
-                  <div className="info-value">Monday–Sunday, 24/7</div>
+                  <div className="info-value">{brand.contact.hours}</div>
                 </div>
                 <div className="info-item">
                   <div className="info-label">Email</div>
-                  <div className="info-value">pb.brgy697@gmail.com</div>
+                  <div className="info-value">{brand.contact.email}</div>
                 </div>
               </div>
             </div>

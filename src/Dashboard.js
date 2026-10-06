@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import ImageCropModal from './ImageCropModal';
 import { buildNotifications } from './Notifications';
+import brand from './brand';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
@@ -405,7 +406,7 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
         <div className="help-grid">
           <div className="help-card">
             <h4>Office Hours</h4>
-            <p>Monday – Sunday, 24/7</p>
+            <p>{brand.contact.hours}</p>
           </div>
           <div className="help-card">
             <h4>Document Processing</h4>
@@ -413,7 +414,7 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
           </div>
           <div className="help-card">
             <h4>Need Help?</h4>
-            <p>Email us at pb.brgy697@gmail.com or see our Emergency Hotlines page for other contact numbers.</p>
+            <p>Email us at {brand.contact.email} or see our Emergency Hotlines page for other contact numbers.</p>
           </div>
         </div>
 
