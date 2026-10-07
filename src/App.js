@@ -185,7 +185,7 @@ function App() {
             <div className="section" id="about-section">
               <h2 className="section-title">About This Portal</h2>
               <p style={{ maxWidth: 720, margin: '0 auto 24px', textAlign: 'center', color: 'var(--ink-muted)', fontSize: 15, lineHeight: 1.6 }}>
-                The Barangay Malate, Manila, District V, City of Manila Resident Portal is an online service that lets registered residents request barangay documents, track their requests, and manage their resident information — without needing to visit the barangay hall for every transaction.
+                The Barangay Sample, Sample City, Philippines Resident Portal is an online service that lets registered residents request barangay documents, track their requests, and manage their resident information — without needing to visit the barangay hall for every transaction.
               </p>
               <div className="info-grid">
                 <div className="info-item">

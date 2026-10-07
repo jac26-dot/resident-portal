@@ -6,9 +6,9 @@ import logoHorizontalLight from './brand-logo-light.png';
 const brand = {
   productName: 'BaryoHub',
   appName: 'Barangay Management System',
-  organizationName: 'Barangay Malate, Manila, District V, City of Manila',
-  shortName: 'Barangay Malate',
-  location: 'Malate, Manila, District V, City of Manila',
+  organizationName: 'Barangay Sample, Sample City, Philippines',
+  shortName: 'Barangay Sample',
+  location: 'Sample City, Philippines',
   contact: {
     address: '123 Sample Street, Sample City, Philippines 0000',
     email: 'info@barangay-sample.example',

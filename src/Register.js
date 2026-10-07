@@ -136,7 +136,7 @@ const Register = ({ onDone, onGoLogin, onBack }) => {
           <h3 className="form-section-title">Address & Contact</h3>
           <div className="form-group">
             <label className="form-label" htmlFor="reg-address">Complete Address *</label>
-            <input id="reg-address" className="form-control" name="address" placeholder="House No., Street, Malate" value={form.address} onChange={handleChange} required aria-required="true" />
+            <input id="reg-address" className="form-control" name="address" placeholder="House No., Street, Barangay" value={form.address} onChange={handleChange} required aria-required="true" />
           </div>
           <div className="form-row">
             <div className="form-group">

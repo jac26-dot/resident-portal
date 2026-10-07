@@ -81,7 +81,7 @@ const VerifyResidency = ({ onVerified, onGoRequest }) => {
     <div className="section">
       <div className="form-header" style={{ padding: 0, marginBottom: 24, textAlign: 'center' }}>
         <h2>Verify Your Residency</h2>
-        <p>Before requesting a document, we need to confirm you're a registered resident of Barangay Malate, Manila, District V, City of Manila.</p>
+        <p>Before requesting a document, we need to confirm you're a registered resident of Barangay Sample, Sample City, Philippines.</p>
       </div>
 
       {error && <div className="alert-error">{error}</div>}

@@ -175,7 +175,7 @@ export default function HomeSections({ navTo }) {
       <section className="hs-section hs-muted" id="gallery-section">
         <div className="hs-wrap">
           <h2 className="hs-title">Community Gallery</h2>
-          <p className="hs-lead">Moments from Barangay Malate, Manila, District V, City of Manila.</p>
+          <p className="hs-lead">Moments from Barangay Sample, Sample City, Philippines.</p>
           <div className="hs-gallery">
             {PHOTOS.map((p, i) => (
               <figure className={`hs-photo ${i === 0 ? 'hs-feature' : ''}`} key={p.id}>

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 const SLIDES = [
   { src: '/images/hero/hero-1.jpg', alt: 'Barangay police clearing the street during heavy rain' },
   { src: '/images/hero/hero-2.jpg', alt: 'DRRMO ambulance on standby' },
-  { src: '/images/hero/hero-3.jpg', alt: 'Barangay Malate, Manila, District V, City of Manila community event' },
+  { src: '/images/hero/hero-3.jpg', alt: 'Barangay Sample, Sample City, Philippines community event' },
 ];
 
 const HeroSlider = ({ children }) => {

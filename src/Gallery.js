@@ -16,7 +16,7 @@ const Gallery = () => {
     <div className="section">
       <div className="form-header" style={{ padding: 0, marginBottom: 32, textAlign: 'center' }}>
         <h2>Community Gallery</h2>
-        <p>Photos from Barangay Malate, Manila, District V, City of Manila.</p>
+        <p>Photos from Barangay Sample, Sample City, Philippines.</p>
       </div>
 
       <div className="gallery-grid">
