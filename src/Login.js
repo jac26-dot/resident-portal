@@ -2,19 +2,32 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import PasswordInput from './PasswordInput';
 import logo from './barangay-logo.png';
+import brand from './brand';
+import './login.css';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
-const POINTS = [
-  { text: 'Request barangay documents online', d: 'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h6' },
-  { text: 'Track the status of every request', d: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4' },
-  { text: 'Get notified when it is ready', d: 'M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0' },
+// What happens after logging in, in order. The numbers are real:
+// a request goes through these steps one after the other.
+const STEPS = [
+  { title: 'Request online',    text: 'Choose a document and send your request.' },
+  { title: 'Follow its status', text: 'Check every request from your account.' },
+  { title: 'Get notified',      text: 'We notify you when it is ready for pickup.' },
 ];
+
+const greeting = () => {
+  const h = new Date().getHours();
+  if (h < 12) return 'Magandang umaga';
+  if (h < 13) return 'Magandang tanghali';
+  if (h < 18) return 'Magandang hapon';
+  return 'Magandang gabi';
+};
 
 const Login = ({ onLoggedIn, onGoRegister, onBack }) => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const contact = brand.contact || {};
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -40,58 +53,94 @@ const Login = ({ onLoggedIn, onGoRegister, onBack }) => {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-wrap">
-        {onBack && <button className="back-btn" onClick={onBack} type="button">&larr; Back</button>}
+    <div className="lg-page">
+      <aside className="lg-aside">
+        <img src={logo} alt="" aria-hidden="true" className="lg-watermark" />
 
-        <div className="auth-card">
-          <aside className="auth-aside">
-            <img src={logo} alt="Barangay Sample, Sample City, Philippines logo" className="auth-logo" />
-            <h2>Welcome back</h2>
-            <p>Barangay Sample, Sample City, Philippines. Your barangay services, online.</p>
-            <ul className="auth-points">
-              {POINTS.map((p) => (
-                <li key={p.text}>
-                  <span className="auth-point-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={p.d} /></svg>
-                  </span>
-                  {p.text}
-                </li>
-              ))}
-            </ul>
-          </aside>
+        <div className="lg-aside-inner">
+          {onBack && (
+            <button className="lg-back" onClick={onBack} type="button">
+              <span aria-hidden="true">&larr;</span> Back to home
+            </button>
+          )}
 
-          <div className="auth-main">
-            <div className="form-header">
-              <h2>Login</h2>
-              <p>Log in to view your document requests and profile.</p>
+          <img src={logo} alt={`${brand.organizationName} logo`} className="lg-seal" />
+          <h2>{greeting()}.</h2>
+          <p className="lg-aside-sub">Sign in to request barangay documents and follow each request online.</p>
+
+          <ol className="lg-steps">
+            {STEPS.map((s, i) => (
+              <li key={s.title}>
+                <span className="lg-step-num" aria-hidden="true">{i + 1}</span>
+                <span className="lg-step-text">
+                  <strong>{s.title}</strong>
+                  <span>{s.text}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+
+          <div className="lg-org">{brand.organizationName}</div>
+        </div>
+      </aside>
+
+      <section className="lg-main">
+        <div className="lg-main-inner">
+          <h2>Log in</h2>
+          <p className="lg-lead">Use the email and password you registered with.</p>
+
+          {error && <div className="lg-error" role="alert">{error}</div>}
+
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="lg-field">
+              <label className="lg-label" htmlFor="login-email">Email address</label>
+              <input
+                id="login-email"
+                className="lg-input"
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                autoComplete="email"
+                required
+                aria-required="true"
+              />
+            </div>
+            <div className="lg-field">
+              <label className="lg-label" htmlFor="login-password">Password</label>
+              <PasswordInput
+                id="login-password"
+                className="lg-input"
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                autoComplete="current-password"
+                required
+                aria-required="true"
+              />
             </div>
 
-            {error && <div className="alert-error">{error}</div>}
+            <button type="submit" className="lg-submit" disabled={loading}>
+              {loading ? 'Logging in...' : 'Log In'}
+            </button>
+          </form>
 
-            <form onSubmit={handleSubmit} className="request-form" noValidate>
-              <div className="form-section">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="login-email">Email Address *</label>
-                  <input id="login-email" className="form-control" type="email" name="email" value={form.email} onChange={handleChange} required aria-required="true" />
-                </div>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="login-password">Password *</label>
-                  <PasswordInput id="login-password" className="form-control" type="password" name="password" value={form.password} onChange={handleChange} required aria-required="true" />
-                </div>
-              </div>
+          <div className="lg-divider"><span>New to the portal?</span></div>
+          <button type="button" className="lg-register" onClick={onGoRegister}>Register as Resident</button>
 
-              <button type="submit" className="btn-primary btn-full" disabled={loading}>
-                {loading ? 'Logging in...' : 'Log In'}
-              </button>
-
-              <p className="auth-foot">
-                Don't have an account? <button type="button" className="btn-link" onClick={onGoRegister}>Register as Resident</button>
-              </p>
-            </form>
-          </div>
+          {(contact.email || contact.hours) && (
+            <p className="lg-help">
+              <strong>Can't log in?</strong>{' '}
+              {contact.email && <>Email {contact.email}</>}
+              {contact.email && contact.hours && ' or visit'}
+              {!contact.email && contact.hours && 'Visit'}
+              {contact.hours && <> the barangay hall. Office hours: {contact.hours}.</>}
+              {!contact.hours && '.'}
+            </p>
+          )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };
