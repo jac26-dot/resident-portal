@@ -45,6 +45,11 @@ button, input, select, textarea, option, table, th, td, nav, footer, header {
 html, body {
   height: auto;
   min-height: 100%;
+}
+/* Only <html> clips sideways overflow. Setting overflow on <body> as well made
+   <body> a scroll container, and that stopped the sticky top bar from following
+   the page when scrolling. */
+html {
   overflow-y: auto;
   overflow-x: hidden;
 }
