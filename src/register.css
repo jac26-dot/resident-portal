@@ -1,0 +1,364 @@
+/* ============================================================
+   Resident Portal - Register page
+   Full-width split screen, matching the new login: navy panel on
+   the left (stays in view while you scroll), form on the right.
+   Every class here starts with "rg-" so nothing else in the app
+   (Login, My Account, Request form, home sections) is affected.
+   Colours come from the variables in App.css (navy, gold, ...).
+   ============================================================ */
+
+/* Let the page fill the space between the header and the footer. */
+.main:has(> .rg-page) { display: flex; flex-direction: column; }
+
+/* App.css sets overflow-x: hidden on <body>, which stops "position: sticky"
+   from working anywhere on the page. Turn that off here only, so the left
+   panel (and the top bar) stay in view while the form scrolls. The sideways
+   overflow is still clipped by <html>. */
+body:has(.rg-page) { overflow: visible; }
+
+.rg-page {
+  flex: 1 0 auto;
+  display: grid;
+  grid-template-columns: minmax(340px, 4fr) 7fr;
+  background: #fff;
+}
+
+/* ---------- Left panel ---------- */
+.rg-aside {
+  position: relative;
+  isolation: isolate;
+  padding: 40px 48px 48px;
+  background: var(--navy);
+  color: #fff;
+  border-right: 4px solid var(--gold);
+}
+.rg-aside-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.rg-watermark {
+  position: absolute;
+  left: -140px;
+  bottom: -120px;
+  width: 560px;
+  height: 560px;
+  object-fit: contain;
+  opacity: 0.07;
+}
+/* Stays visible while the long form scrolls. */
+.rg-aside-inner {
+  position: sticky;
+  top: 94px;
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.rg-back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 30px;
+  padding: 6px 0;
+  background: none;
+  border: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.rg-back:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
+.rg-seal {
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  margin-bottom: 24px;
+}
+.rg-aside h2 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.rg-aside-sub {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.rg-steps { list-style: none; margin: 36px 0 0; padding: 0; }
+.rg-steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+.rg-steps li:last-child { padding-bottom: 0; }
+.rg-steps li:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 34px;
+  bottom: 2px;
+  border-left: 2px dotted rgba(201, 162, 39, 0.6);
+}
+.rg-step-num {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--gold-tint);
+  font-size: 14px;
+  font-weight: 700;
+}
+.rg-step-text { padding-top: 3px; line-height: 1.4; }
+.rg-step-text strong { display: block; font-size: 15px; font-weight: 700; color: #fff; }
+.rg-step-text span { display: block; margin-top: 2px; font-size: 13.5px; color: rgba(255, 255, 255, 0.74); }
+
+/* ---------- Right panel ---------- */
+.rg-main {
+  display: flex;
+  justify-content: center;
+  padding: 48px 56px 72px;
+  background: #fff;
+}
+.rg-main-inner { width: 100%; max-width: 760px; }
+
+.rg-required-note {
+  margin: 0 0 22px;
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.rg-error {
+  margin-bottom: 22px;
+  padding: 12px 14px;
+  background: var(--crimson-tint);
+  border-left: 4px solid var(--crimson);
+  border-radius: 2px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--crimson);
+}
+
+/* Form sections: plain groups with a numbered heading, no boxes. */
+.rg-form { counter-reset: rg-step; }
+.rg-section {
+  min-width: 0;
+  margin: 0 0 30px;
+  padding: 0 0 30px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+}
+.rg-section-title {
+  counter-increment: rg-step;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 0;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--navy-deep);
+}
+.rg-section-title::before {
+  content: counter(rg-step);
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 700;
+}
+.rg-section-title small { font-size: 13px; font-weight: 400; color: var(--ink-muted); letter-spacing: 0; }
+
+/* Fields line up in rows that share the same width and height. */
+.rg-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px 16px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+.rg-row:last-child, .rg-field:last-child { margin-bottom: 0; }
+.rg-field { min-width: 0; }
+.rg-full { margin-bottom: 18px; }
+
+.rg-label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.rg-label small { font-size: 13px; font-weight: 400; color: var(--ink-muted); }
+
+.rg-input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid #c4c8d2;
+  border-radius: 3px;
+  background: #fff;
+  font-size: 15px;
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.rg-input:hover { border-color: #a3a9b8; }
+.rg-input:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 4px rgba(19, 42, 82, 0.15);
+}
+.rg-input::placeholder { color: #7b8190; }
+.rg-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23132a52' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+}
+
+.rg-strength { margin-top: 8px; }
+.rg-strength-track { height: 5px; background: #e8ebf1; border-radius: 3px; overflow: hidden; }
+.rg-strength-bar { height: 100%; transition: width 0.2s; }
+.rg-strength span { display: block; margin-top: 4px; font-size: 13px; font-weight: 700; }
+.rg-hint-bad { display: block; margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--crimson); }
+.rg-help { margin: 14px 0 0; font-size: 13px; color: var(--ink-muted); }
+
+.rg-note {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  background: var(--paper-dim);
+  border-left: 4px solid var(--gold);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+/* Tick boxes as large tap targets. */
+.rg-checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.rg-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid #c4c8d2;
+  border-radius: 3px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+.rg-check:hover { border-color: #a3a9b8; }
+.rg-check:has(input:checked) { border-color: var(--navy); background: var(--gold-tint); }
+.rg-check input, .rg-agree input { width: 18px; height: 18px; accent-color: var(--navy); flex: none; }
+
+.rg-agree {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 0 22px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  cursor: pointer;
+}
+.rg-agree input { margin-top: 2px; }
+.rg-agree a { color: var(--navy); font-weight: 700; }
+
+.rg-submit {
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 3px;
+  background: var(--navy);
+  box-shadow: inset 0 -3px 0 var(--gold);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.rg-submit:hover { background: var(--navy-deep); }
+.rg-submit:disabled { opacity: 0.65; cursor: default; }
+
+.rg-login-line { margin: 20px 0 0; text-align: center; font-size: 14.5px; color: var(--ink-muted); }
+.rg-login-link {
+  padding: 4px 2px;
+  background: none;
+  border: 0;
+  color: var(--navy);
+  font-size: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.rg-submit:focus-visible,
+.rg-login-link:focus-visible,
+.rg-back:focus-visible,
+.rg-agree a:focus-visible,
+.rg-check input:focus-visible,
+.rg-agree input:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* ---------- Success ---------- */
+.rg-done { max-width: 460px; margin: 72px auto 0; text-align: center; }
+.rg-done-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: #e4f2ea;
+  color: #1d7a52;
+}
+.rg-done-icon svg { width: 34px; height: 34px; }
+.rg-done h2 { margin: 0 0 10px; font-size: 30px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; color: var(--navy-deep); }
+.rg-done p { margin: 0 0 26px; font-size: 15.5px; line-height: 1.6; color: var(--ink-muted); }
+
+/* ---------- Tablets and phones ---------- */
+@media (max-width: 900px) {
+  .rg-page { grid-template-columns: 1fr; }
+  .rg-aside {
+    padding: 20px 24px 28px;
+    border-right: 0;
+    border-bottom: 4px solid var(--gold);
+  }
+  .rg-aside-inner { position: static; max-width: none; margin: 0; }
+  .rg-back { margin-bottom: 18px; }
+  .rg-seal { width: 56px; height: 56px; margin-bottom: 14px; }
+  .rg-aside h2 { font-size: 26px; }
+  .rg-steps { display: none; }
+  .rg-watermark { left: auto; right: -70px; bottom: -90px; width: 280px; height: 280px; }
+  .rg-main { padding: 32px 20px 56px; }
+}

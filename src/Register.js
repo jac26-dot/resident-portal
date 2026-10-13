@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import PasswordInput from './PasswordInput';
+import logo from './barangay-logo.png';
+import brand from './brand';
+import './register.css';
 
 const API = 'https://barangay-system-xf6j.onrender.com/api';
 
@@ -14,8 +17,8 @@ function passwordStrength(pw) {
   if (/[^A-Za-z0-9]/.test(pw)) score++;
   const levels = [
     { label: 'Very weak', pct: 20, color: '#c81e1e' },
-    { label: 'Weak', pct: 40, color: '#c27803' },
-    { label: 'Fair', pct: 60, color: '#c27803' },
+    { label: 'Weak', pct: 40, color: '#a45f00' },
+    { label: 'Fair', pct: 60, color: '#8a5d00' },
     { label: 'Good', pct: 80, color: '#2f5fb3' },
     { label: 'Strong', pct: 100, color: '#057a55' },
   ];
@@ -29,11 +32,26 @@ const EMPTY = {
   isVoter: false, isIndigent: false, isSeniorCitizen: false,
 };
 
+// What happens after this form, in order.
+const STEPS = [
+  { title: 'Fill in this form',  text: 'Use your real name and a number we can reach.' },
+  { title: 'Wait for approval',  text: 'The barangay office checks your details.' },
+  { title: 'Log in',             text: 'Request documents and track them online.' },
+];
+
 const Register = ({ onDone, onGoLogin, onBack }) => {
   const [form, setForm] = useState(EMPTY);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(null);
+  const errorRef = useRef(null);
+
+  // The form is long, so bring the error into view when it appears.
+  useEffect(() => {
+    if (error && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [error]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -70,144 +88,176 @@ const Register = ({ onDone, onGoLogin, onBack }) => {
     }
   };
 
-  if (success) {
-    return (
-      <div className="section">
-        <div className="success-box">
-          <div className="success-icon">✅</div>
-          <h2>Account Created</h2>
-          <p>{success}</p>
-          <div className="success-btns">
-            <button className="btn-primary" onClick={onGoLogin}>Go to Login</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="section auth-register">
-      {onBack && <button className="back-btn" onClick={onBack} type="button">← Back</button>}
-      <div className="form-header" style={{ textAlign: 'center' }}>
-        <h2>Create a Resident Account</h2>
-        <p>Register once to track all your document requests in one place. Admin approval is required before you can log in.</p>
-      </div>
-
-      {error && <div className="alert-error">{error}</div>}
-
-      <form onSubmit={handleSubmit} className="request-form" noValidate>
-        <div className="form-section">
-          <h3 className="form-section-title">Personal Information</h3>
-          <div className="form-row-3">
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-first">First Name *</label>
-              <input id="reg-first" className="form-control" name="firstName" value={form.firstName} onChange={handleChange} required aria-required="true" />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-middle">Middle Name <span style={{fontWeight:400,color:'#6b7280'}}>(optional)</span></label>
-              <input id="reg-middle" className="form-control" name="middleName" value={form.middleName} onChange={handleChange} />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-last">Last Name *</label>
-              <input id="reg-last" className="form-control" name="lastName" value={form.lastName} onChange={handleChange} required aria-required="true" />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-dob">Date of Birth *</label>
-              <input id="reg-dob" className="form-control" type="date" name="birthDate" value={form.birthDate} onChange={handleChange} required aria-required="true" />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-gender">Gender</label>
-              <select id="reg-gender" className="form-control" name="gender" value={form.gender} onChange={handleChange}>
-                <option>Male</option><option>Female</option>
-              </select>
-            </div>
-          </div>
-          <div className="form-group">
-            <label className="form-label" htmlFor="reg-civil">Civil Status</label>
-            <select id="reg-civil" className="form-control" name="civilStatus" value={form.civilStatus} onChange={handleChange}>
-              <option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option>
-            </select>
-          </div>
+    <div className="rg-page">
+      <aside className="rg-aside">
+        <div className="rg-aside-bg" aria-hidden="true">
+          <img src={logo} alt="" className="rg-watermark" />
         </div>
 
-        <div className="form-section">
-          <h3 className="form-section-title">Address & Contact</h3>
-          <div className="form-group">
-            <label className="form-label" htmlFor="reg-address">Complete Address *</label>
-            <input id="reg-address" className="form-control" name="address" placeholder="House No., Street, Barangay" value={form.address} onChange={handleChange} required aria-required="true" />
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-contact">Contact Number *</label>
-              <input id="reg-contact" className="form-control" name="contactNumber" placeholder="09XXXXXXXXX" value={form.contactNumber} onChange={handleChange} required aria-required="true" />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-email">Email Address *</label>
-              <input id="reg-email" className="form-control" type="email" name="email" value={form.email} onChange={handleChange} required aria-required="true" />
-            </div>
-          </div>
-        </div>
+        <div className="rg-aside-inner">
+          {onBack && (
+            <button className="rg-back" onClick={onBack} type="button">
+              <span aria-hidden="true">&larr;</span> Back to home
+            </button>
+          )}
 
-        <div className="form-section">
-          <h3 className="form-section-title">Account Security</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-password">Password *</label>
-              <PasswordInput id="reg-password" className="form-control" type="password" name="password" value={form.password} onChange={handleChange} required aria-required="true" aria-describedby="pw-strength" />
-              {form.password && (
-                <div id="pw-strength" style={{ marginTop: 6 }}>
-                  <div style={{ height: 5, background: '#eef1f5', borderRadius: 3, overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${strength.pct}%`, background: strength.color, transition: 'width .2s' }} />
-                  </div>
-                  <span style={{ fontSize: 12, color: strength.color, fontWeight: 600 }}>{strength.label}</span>
-                </div>
-              )}
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-confirm">Confirm Password *</label>
-              <PasswordInput id="reg-confirm" className="form-control" type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required aria-required="true" />
-              {form.confirmPassword && form.password !== form.confirmPassword && (
-                <span style={{ fontSize: 12, color: '#c81e1e' }}>Passwords do not match.</span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="form-section">
-          <h3 className="form-section-title">Resident Classification <span style={{fontWeight:400,color:'#6b7280',fontSize:12}}>(optional)</span></h3>
-          <p className="form-note" style={{ margin: '0 0 14px' }}>
-            Select any that apply. These are self-declared at registration and may be confirmed by the barangay office; selecting a classification here does not by itself constitute official verification.
+          <img src={logo} alt={`${brand.organizationName} logo`} className="rg-seal" />
+          <h2>Create a resident account</h2>
+          <p className="rg-aside-sub">
+            Register once to track all your document requests in one place.
+            An admin must approve your account before you can log in.
           </p>
-          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13.5 }}>
-              <input type="checkbox" name="isVoter" checked={form.isVoter} onChange={handleChange} /> Registered Voter
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13.5 }}>
-              <input type="checkbox" name="isIndigent" checked={form.isIndigent} onChange={handleChange} /> Indigent
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13.5 }}>
-              <input type="checkbox" name="isSeniorCitizen" checked={form.isSeniorCitizen} onChange={handleChange} /> Senior Citizen
-            </label>
-          </div>
+
+          <ol className="rg-steps">
+            {STEPS.map((s, i) => (
+              <li key={s.title}>
+                <span className="rg-step-num" aria-hidden="true">{i + 1}</span>
+                <span className="rg-step-text">
+                  <strong>{s.title}</strong>
+                  <span>{s.text}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
         </div>
+      </aside>
 
-        <div className="form-note" style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-          <input type="checkbox" id="agreeTerms" name="agreeTerms" checked={form.agreeTerms} onChange={handleChange} style={{ marginTop: 3 }} required aria-required="true" />
-          <label htmlFor="agreeTerms" style={{ fontSize: 13 }}>
-            I have read and agree to the <a href="#/terms">Terms and Conditions</a> and the <a href="#/privacy">Privacy Notice</a>.
-          </label>
+      <section className="rg-main">
+        <div className="rg-main-inner">
+          {success ? (
+            <div className="rg-done" role="status">
+              <span className="rg-done-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+              </span>
+              <h2>Account created</h2>
+              <p>{success}</p>
+              <button type="button" className="rg-submit" onClick={onGoLogin}>Go to Login</button>
+            </div>
+          ) : (
+            <>
+              <p className="rg-required-note">Fields marked * are required.</p>
+
+              {error && <div className="rg-error" role="alert" ref={errorRef}>{error}</div>}
+
+              <form onSubmit={handleSubmit} className="rg-form" noValidate>
+                <fieldset className="rg-section">
+                  <legend className="rg-section-title">Personal information</legend>
+                  <div className="rg-row">
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-first">First name *</label>
+                      <input id="reg-first" className="rg-input" name="firstName" value={form.firstName} onChange={handleChange} autoComplete="given-name" required aria-required="true" />
+                    </div>
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-middle">Middle name <small>(optional)</small></label>
+                      <input id="reg-middle" className="rg-input" name="middleName" value={form.middleName} onChange={handleChange} autoComplete="additional-name" />
+                    </div>
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-last">Last name *</label>
+                      <input id="reg-last" className="rg-input" name="lastName" value={form.lastName} onChange={handleChange} autoComplete="family-name" required aria-required="true" />
+                    </div>
+                  </div>
+                  <div className="rg-row">
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-dob">Date of birth *</label>
+                      <input id="reg-dob" className="rg-input" type="date" name="birthDate" value={form.birthDate} onChange={handleChange} autoComplete="bday" required aria-required="true" />
+                    </div>
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-gender">Gender</label>
+                      <select id="reg-gender" className="rg-input rg-select" name="gender" value={form.gender} onChange={handleChange}>
+                        <option>Male</option><option>Female</option>
+                      </select>
+                    </div>
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-civil">Civil status</label>
+                      <select id="reg-civil" className="rg-input rg-select" name="civilStatus" value={form.civilStatus} onChange={handleChange}>
+                        <option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option>
+                      </select>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset className="rg-section">
+                  <legend className="rg-section-title">Address and contact</legend>
+                  <div className="rg-field rg-full">
+                    <label className="rg-label" htmlFor="reg-address">Complete address *</label>
+                    <input id="reg-address" className="rg-input" name="address" placeholder="House No., Street, Barangay" value={form.address} onChange={handleChange} autoComplete="street-address" required aria-required="true" />
+                  </div>
+                  <div className="rg-row">
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-contact">Contact number *</label>
+                      <input id="reg-contact" className="rg-input" name="contactNumber" placeholder="09XXXXXXXXX" value={form.contactNumber} onChange={handleChange} autoComplete="tel" inputMode="tel" required aria-required="true" />
+                    </div>
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-email">Email address *</label>
+                      <input id="reg-email" className="rg-input" type="email" name="email" value={form.email} onChange={handleChange} autoComplete="email" required aria-required="true" />
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset className="rg-section">
+                  <legend className="rg-section-title">Account security</legend>
+                  <div className="rg-row">
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-password">Password *</label>
+                      <PasswordInput id="reg-password" className="rg-input" type="password" name="password" value={form.password} onChange={handleChange} autoComplete="new-password" required aria-required="true" aria-describedby="pw-strength" />
+                      {form.password && (
+                        <div id="pw-strength" className="rg-strength">
+                          <div className="rg-strength-track">
+                            <div className="rg-strength-bar" style={{ width: `${strength.pct}%`, background: strength.color }} />
+                          </div>
+                          <span style={{ color: strength.color }}>{strength.label}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="rg-field">
+                      <label className="rg-label" htmlFor="reg-confirm">Confirm password *</label>
+                      <PasswordInput id="reg-confirm" className="rg-input" type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} autoComplete="new-password" required aria-required="true" />
+                      {form.confirmPassword && form.password !== form.confirmPassword && (
+                        <span className="rg-hint-bad">Passwords do not match.</span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="rg-help">Use at least 8 characters. A mix of letters, numbers and symbols is stronger.</p>
+                </fieldset>
+
+                <fieldset className="rg-section">
+                  <legend className="rg-section-title">Resident classification <small>(optional)</small></legend>
+                  <p className="rg-note">
+                    Select any that apply. These are self-declared at registration and may be confirmed by the barangay office; selecting a classification here does not by itself constitute official verification.
+                  </p>
+                  <div className="rg-checks">
+                    <label className="rg-check">
+                      <input type="checkbox" name="isVoter" checked={form.isVoter} onChange={handleChange} /> Registered voter
+                    </label>
+                    <label className="rg-check">
+                      <input type="checkbox" name="isIndigent" checked={form.isIndigent} onChange={handleChange} /> Indigent
+                    </label>
+                    <label className="rg-check">
+                      <input type="checkbox" name="isSeniorCitizen" checked={form.isSeniorCitizen} onChange={handleChange} /> Senior citizen
+                    </label>
+                  </div>
+                </fieldset>
+
+                <label className="rg-agree" htmlFor="agreeTerms">
+                  <input type="checkbox" id="agreeTerms" name="agreeTerms" checked={form.agreeTerms} onChange={handleChange} required aria-required="true" />
+                  <span>
+                    I have read and agree to the <a href="#/terms">Terms and Conditions</a> and the <a href="#/privacy">Privacy Notice</a>.
+                  </span>
+                </label>
+
+                <button type="submit" className="rg-submit" disabled={loading}>
+                  {loading ? 'Creating Account...' : 'Create Resident Account'}
+                </button>
+
+                <p className="rg-login-line">
+                  Already have an account? <button type="button" className="rg-login-link" onClick={onGoLogin}>Log in</button>
+                </p>
+              </form>
+            </>
+          )}
         </div>
-
-        <button type="submit" className="btn-primary btn-full" disabled={loading}>
-          {loading ? 'Creating Account...' : 'Create Resident Account'}
-        </button>
-
-        <p style={{ textAlign: 'center', fontSize: 13, marginTop: 14 }}>
-          Already have an account? <button type="button" className="btn-link" onClick={onGoLogin}>Log in</button>
-        </p>
-      </form>
+      </section>
     </div>
   );
 };
