@@ -47,7 +47,7 @@ const Dashboard = ({ onLogout, onRequestDocument, onTrack, onTrackRequests, onRe
   const [cropSrc, setCropSrc] = useState(null); // raw selected image, shown in the crop modal
   const fileInputRef = useRef(null);
 
-  const token = localStorage.getItem('residentToken');
+  const token = sessionStorage.getItem('residentToken');
 
   const loadProfile = () => {
     if (!token) { onLogout(); return; }

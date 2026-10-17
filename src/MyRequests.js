@@ -26,7 +26,7 @@ const MyRequests = ({ initialFilter = 'All', title, onBack, onRequestDocument })
   const [statusFilter, setStatusFilter] = useState(initialFilter);
   const [expandedId, setExpandedId] = useState(null);
 
-  const token = localStorage.getItem('residentToken');
+  const token = sessionStorage.getItem('residentToken');
 
   useEffect(() => {
     if (!token) { setError('You must be logged in to view your requests.'); return; }

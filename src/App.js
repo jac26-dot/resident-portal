@@ -3,7 +3,6 @@ import RequestForm from './RequestForm';
 import TrackRequest from './TrackRequest';
 import Hotlines from './Hotlines';
 import Gallery from './Gallery';
-import VerifyResidency from './VerifyResidency';
 import Register from './Register';
 import Login from './Login';
 import Dashboard from './Dashboard';
@@ -18,6 +17,20 @@ import logo from './barangay-logo.png';
 import './App.css';
 import HomeSections from './HomeSections';
 import brand from './brand';
+
+// The login token is kept for this browser tab only. It is cleared when the
+// tab is closed, so a shared computer does not stay signed in. Anything an
+// older version or the login page left in localStorage is moved here.
+function keepSessionOnly() {
+  ['residentToken', 'residentInfo'].forEach((key) => {
+    const value = localStorage.getItem(key);
+    if (value) {
+      sessionStorage.setItem(key, value);
+      localStorage.removeItem(key);
+    }
+  });
+}
+keepSessionOnly();
 
 // Simple, consistent line-style icons (no emoji) for each document type.
 const DocIcon = ({ type }) => {
@@ -58,10 +71,11 @@ const DOCUMENTS = [
 
 // Every page reachable by hash, so a direct link or refresh lands
 // on the right screen instead of always resetting to Home.
-const VALID_PAGES = ['home', 'request', 'verify', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy', 'track-requests', 'request-history', 'notifications', 'about', 'services'];
+const VALID_PAGES = ['home', 'request', 'track', 'hotlines', 'gallery', 'register', 'login', 'dashboard', 'terms', 'privacy', 'track-requests', 'request-history', 'notifications', 'about', 'services'];
 
 function pageFromHash() {
   const raw = window.location.hash.replace(/^#\/?/, '');
+  if (raw === 'verify') return 'login'; // the guest residency check no longer exists
   return VALID_PAGES.includes(raw) ? raw : 'home';
 }
 
@@ -94,6 +108,7 @@ function App() {
   // always matches what's on screen — this is what makes a page
   // like #/terms survive a refresh or work as a direct link.
   const setPage = (p) => {
+    if (p === 'verify') p = 'login';
     setPageState(p);
     setMenuOpen(false);
     const target = `#/${p}`;
@@ -109,10 +124,11 @@ function App() {
   }, []);
 
   const goRequest = () => setPage('request');
-  const goVerify = () => setPage('verify');
-  const [residentLoggedIn, setResidentLoggedIn] = useState(!!localStorage.getItem('residentToken'));
+  const [residentLoggedIn, setResidentLoggedIn] = useState(!!sessionStorage.getItem('residentToken'));
   const goDashboard = () => setPage('dashboard');
   const handleLogout = () => {
+    sessionStorage.removeItem('residentToken');
+    sessionStorage.removeItem('residentInfo');
     localStorage.removeItem('residentToken');
     localStorage.removeItem('residentInfo');
     setResidentLoggedIn(false);
@@ -246,13 +262,12 @@ function App() {
           </div>
         )}
 
-        {page === 'request' && <RequestForm onTrack={goTrack} onVerify={goVerify} onBack={() => (residentLoggedIn ? goDashboard() : navTo('home'))} />}
-        {page === 'verify' && <VerifyResidency onGoRequest={goRequest} />}
+        {page === 'request' && <RequestForm onTrack={goTrack} onLogin={() => navTo('login')} onRegister={() => navTo('register')} onBack={() => (residentLoggedIn ? goDashboard() : navTo('home'))} />}
         {page === 'track' && <TrackRequest initialNumber={trackNumber} />}
         {page === 'hotlines' && <Hotlines />}
         {page === 'gallery' && <Gallery />}
         {page === 'register' && <Register onGoLogin={() => navTo('login')} onBack={() => navTo('home')} />}
-        {page === 'login' && <Login onLoggedIn={() => { setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} onBack={() => navTo('home')} />}
+        {page === 'login' && <Login onLoggedIn={() => { keepSessionOnly(); setResidentLoggedIn(true); goDashboard(); }} onGoRegister={() => navTo('register')} onBack={() => navTo('home')} />}
         {page === 'dashboard' && <Dashboard onLogout={handleLogout} onRequestDocument={goRequest} onTrack={goTrack} onTrackRequests={() => navTo('track-requests')} onRequestHistory={() => navTo('request-history')} onOpenNotifications={() => navTo('notifications')} />}
         {page === 'track-requests' && <MyRequests initialFilter="Active" title="Track My Requests" onBack={goDashboard} onRequestDocument={goRequest} />}
         {page === 'request-history' && <MyRequests initialFilter="All" title="Request History" onBack={goDashboard} onRequestDocument={goRequest} />}

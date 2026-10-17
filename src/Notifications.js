@@ -49,7 +49,7 @@ const Notifications = ({ onBack }) => {
   const [error, setError] = useState('');
   const [lastRead, setLastRead] = useState(null);
 
-  const token = localStorage.getItem('residentToken');
+  const token = sessionStorage.getItem('residentToken');
 
   useEffect(() => {
     if (!token) { setError('You must be logged in to view notifications.'); return; }
